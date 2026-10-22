@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>FreelaFree</title>
+ <meta name="description" content="FreelaFree conecta freelancers e contratantes no Brasil. O freelancer recebe 100% do valor combinado — a taxa de 5% é paga pelo contratante.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="FreelaFree — O freelancer recebe 100%. Sem comissões abusivas.">
+ <meta property="og:description" content="FreelaFree conecta freelancers e contratantes no Brasil. O freelancer recebe 100% do valor combinado — a taxa de 5% é paga pelo contratante.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="FreelaFree — O freelancer recebe 100%. Sem comissões abusivas.">
+ <meta name="twitter:description" content="FreelaFree conecta freelancers e contratantes no Brasil. O freelancer recebe 100% do valor combinado — a taxa de 5% é paga pelo contratante.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link {
+   position: absolute;
+   left: -9999px;
+   top: 0;
+   background: #2563eb;
+   color: #fff;
+   padding: 10px 16px;
+   z-index: 1000;
+   border-radius: 0 0 8px 0;
+   text-decoration: none;
+   font-weight: 600;
+  }
+  .skip-link:focus {
+   left: 0;
+  }
+  a:focus-visible, button:focus-visible, input:focus-visible,
+  select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+   outline: 3px solid #2563eb;
+   outline-offset: 2px;
+  }
+  .sr-only {
+   position: absolute;
+   width: 1px; height: 1px;
+   padding: 0; margin: -1px;
+   overflow: hidden;
+   clip: rect(0,0,0,0);
+   white-space: nowrap;
+   border: 0;
+  }
+  /* Botão do painel administrativo (só admins veem) */
+  .btn-admin-home {
+   display: inline-block;
+   padding: 16px 34px;
+   border-radius: 50px;
+   font-weight: 600;
+   font-size: 16px;
+   text-decoration: none;
+   background: #0f172a;
+   color: #fff;
+   border: 2px solid #0f172a;
+   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35);
+   transition: all .3s ease;
+  }
+  .btn-admin-home:hover {
+   background: #1e293b;
+   border-color: #1e293b;
+   transform: translateY(-4px);
+   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+  }
+ </style>
+</head>
+<body>
+
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Conectando freelancers e contratantes de forma simples e justa.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links-index">&#9776;</button>
+
+ <div class="nav-links" id="nav-links-index">
+ <a href="#">Inicio</a>
+ <a href="#sobre">Sobre</a>
+ <a href="#servicos">Serviços</a>
+ <a href="#beneficios">Benefícios</a>
+ <a href="#footer">Contato</a>
+ <a href="termos.html">Termos de uso</a>
+ <a href="privacidade.html">Privacidade</a>
+ <a href="#como-funciona">Como Funciona</a>
+ <a href="mensagens.html">Mensagens</a>
+ </div>
+
+ <div class="nav-right">
+ <div class="search-bar">
+ <label for="busca-index" class="sr-only">Buscar no site</label>
+ <input type="text" id="busca-index" placeholder="Buscar...">
+ <button class="search-btn" aria-label="Buscar"></button>
+ </div>
+
+ <div id="userArea">
+ <a href="login.html" class="btn-login">Login</a>
+ <a href="cadastro.html" class="btn-cadastro">Cadastrar</a>
+ </div>
+ </div>
+</nav>
+
+<main id="conteudo-principal">
+<section id="sobre">
+ <h2>Sobre</h2>
+ <div class="card">
+ Plataforma digital que conecta freelancers e contratantes de forma simples, acessível e eficiente.
+ O <strong>freelancer recebe 100% do valor combinado</strong> — sem nenhum desconto.
+ A plataforma cobra uma <strong>taxa de 5% do contratante</strong>, contra os até 20% descontados
+ do freelancer nas plataformas tradicionais. Um ambiente mais justo e direto de contratação.
+ </div>
+</section>
+
+<section id="servicos">
+ <h2>Serviços</h2>
+ <div class="card">Design</div>
+ <div class="card">Programação</div>
+ <div class="card">Redação</div>
+ <div class="card">Marketing</div>
+ <div class="card">Tradução</div>
+ <div class="card">Consultoria</div>
+</section>
+
+<section>
+ <div class="botoes-acao" id="botoesAcao">
+ <a href="publicar.html" class="btn-primary" id="btnPublicarHome">Publicar Projeto</a>
+ <a href="trabalhos.html" class="btn-outline" id="btnTrabalharHome">Quero Trabalhar</a>
+ <a href="admin.html" class="btn-admin-home" id="btnAdminHome" style="display:none;">Painel Administrativo</a>
+ </div>
+</section>
+
+<section id="beneficios">
+ <h2>Benefícios</h2>
+ <div class="card">
+ <p><strong>O freelancer recebe 100% do valor combinado.</strong> Nenhum desconto sobre o seu trabalho.</p>
+ <p><strong>Taxa de apenas 5%</strong>, paga pelo contratante — contra até 20% das plataformas tradicionais.</p>
+ <p>Cadastro e envio de propostas gratuitos para freelancers.</p>
+ <p>Chat integrado para negociar diretamente com o cliente.</p>
+ <p>Sistema de avaliação nos dois sentidos: você sabe com quem está negociando.</p>
+ <p>Sistema de denúncias e moderação ativa.</p>
+ <p>Mais oportunidades de renda extra, com processo simples e rápido.</p>
+ <p>Alternativa mais justa às plataformas tradicionais.</p>
+ <p class="destaque-termos">
+ <a href="termos.html">Acesse os Termos de uso e faça seu Cadastro</a>
+ </p>
+ </div>
+</section>
+
+<section id="como-funciona">
+ <h2>Como Funciona?</h2>
+ <p class="subtitulo">Conecte-se, negocie e trabalhe sem burocracia.</p>
+
+ <div class="passos">
+ <div class="passo">
+ <h3>1. Publique ou encontre trabalhos</h3>
+ <p>Contratantes (CNPJ) publicam projetos. Freelancers (CPF) encontram oportunidades e enviam propostas gratuitamente, definindo seu próprio valor e prazo.</p>
+ </div>
+ <div class="passo">
+ <h3>2. Aceite a proposta</h3>
+ <p>O contratante analisa as propostas recebidas — com a reputação de cada freelancer à vista — e aceita a que preferir. A conversa abre automaticamente.</p>
+ </div>
+ <div class="passo">
+ <h3>3. Negocie pelo chat</h3>
+ <p>Alinhem detalhes, prazos e ajustes diretamente pela plataforma, sem intermediários.</p>
+ </div>
+ <div class="passo">
+ <h3>4. Pagamento transparente</h3>
+ <p>Ao encerrar, o contratante paga o valor acordado na proposta. O freelancer recebe <strong>100%</strong> desse valor; a taxa de 5% é acrescentada ao contratante — tudo detalhado antes da confirmação.</p>
+ </div>
+ <div class="passo">
+ <h3>5. Avaliem-se</h3>
+ <p>Os dois lados se avaliam com estrelas e comentários. A reputação fica pública no perfil e ajuda a próxima pessoa a decidir com segurança.</p>
+ </div>
+ </div>
+</section>
+
+</main>
+
+<footer id="footer">
+ <div class="footer-contato">
+ <p>Freelafree3@gmail.com</p>
+ <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration: none; display: inline-block;">
+ <img src="instagram.svg" alt="Instagram" style="width: 36px; height: 36px; border-radius: 8px; display: block;">
+ </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script>
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const expandido = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!expandido));
+});
+document.addEventListener('DOMContentLoaded', () => {
+ const usuario = typeof Auth !== 'undefined' ? Auth.usuario() : null;
+ if (usuario && usuario.tipo_doc === 'cpf') {
+ document.getElementById('btnPublicarHome').style.display = 'none';
+ } else if (usuario && usuario.tipo_doc === 'cnpj') {
+ document.getElementById('btnTrabalharHome').style.display = 'none';
+ }
+ // Botão do painel administrativo — só para admins
+ if (usuario && usuario.perfil === 'admin') {
+ document.getElementById('btnAdminHome').style.display = 'inline-block';
+ }
+});
+</script>
+<script src="script.js"></script>
+<script src="transitions.js"></script>
+</body>
+</html>

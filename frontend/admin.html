@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Painel Administrativo — FreelaFree</title>
+ <meta name="description" content="Painel administrativo da FreelaFree com estatísticas da plataforma.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta name="robots" content="noindex, nofollow">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link{position:absolute;left:-9999px;top:0;background:#2563eb;color:#fff;padding:10px 16px;z-index:1000;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+  .skip-link:focus{left:0;}
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #2563eb;outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  .adm-wrap{max-width:1000px;margin:0 auto;padding:28px 18px 60px;}
+  .adm-head h2{font-size:26px;color:#1e293b;margin:0 0 4px;}
+  .adm-head p{color:#64748b;margin:0 0 24px;font-size:15px;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:26px;}
+  .card-num{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .card-num .n{font-size:30px;font-weight:800;color:#1e3a8a;line-height:1.1;}
+  .card-num .l{font-size:13px;color:#64748b;margin-top:4px;text-transform:uppercase;letter-spacing:.4px;}
+
+  .painel{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .painel h3{margin:0 0 14px;font-size:17px;color:#1e293b;}
+
+  .barra-linha{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .barra-rot{width:130px;font-size:13px;color:#475569;flex-shrink:0;text-transform:capitalize;}
+  .barra-fundo{flex:1;background:#f1f5f9;border-radius:6px;height:22px;overflow:hidden;}
+  .barra-fill{height:100%;background:linear-gradient(90deg,#1e3a8a,#2563eb);border-radius:6px;min-width:2px;transition:width .5s ease;}
+  .barra-val{width:40px;text-align:right;font-size:13px;font-weight:700;color:#1e293b;flex-shrink:0;}
+
+  .grade2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:760px){ .grade2{grid-template-columns:1fr;} }
+
+  .spark{display:flex;align-items:flex-end;gap:4px;height:110px;padding-top:8px;}
+  .spark-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .spark-b{width:100%;background:linear-gradient(180deg,#2563eb,#1e3a8a);border-radius:4px 4px 0 0;min-height:3px;}
+  .spark-d{font-size:10px;color:#94a3b8;}
+  .vazio{color:#94a3b8;font-size:14px;}
+  .erro-box{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:14px 18px;border-radius:10px;}
+
+  /* Moderação */
+  .abas-den{display:flex;gap:6px;border-bottom:1px solid #e5e7eb;margin-bottom:16px;}
+  .aba-den{background:none;border:none;padding:9px 16px;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;}
+  .aba-den:hover{color:#2563eb;}
+  .aba-den.ativa{color:#2563eb;border-bottom-color:#2563eb;}
+  .den-item{border:1px solid #eef0f3;border-radius:10px;padding:14px;margin-bottom:12px;background:#fafbfc;}
+  .den-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .den-tipo{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px;}
+  .t-projeto{background:#dbeafe;color:#1d4ed8;} .t-usuario{background:#fef3c7;color:#a16207;} .t-mensagem{background:#f3e8ff;color:#7e22ce;}
+  .den-motivo{font-weight:700;color:#b91c1c;font-size:14px;}
+  .den-meta{font-size:12.5px;color:#64748b;}
+  .den-alvo{background:#fff;border:1px solid #eef0f3;border-radius:8px;padding:10px;margin:8px 0;font-size:13.5px;color:#374151;}
+  .den-desc{font-size:14px;color:#1e293b;background:#fff;border-left:3px solid #fca5a5;border-radius:6px;padding:10px 12px;margin:8px 0;}
+  .den-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .den-btn{border:none;padding:8px 15px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit;}
+  .b-arquivar{background:#f1f5f9;color:#475569;} .b-arquivar:hover{background:#e2e8f0;}
+  .b-resolver{background:#16a34a;color:#fff;} .b-resolver:hover{background:#15803d;}
+  .b-banir{background:#dc2626;color:#fff;} .b-banir:hover{background:#b91c1c;}
+  .b-cancelar{background:#ea580c;color:#fff;} .b-cancelar:hover{background:#c2410c;}
+  .b-reativar{background:#0891b2;color:#fff;} .b-reativar:hover{background:#0e7490;}
+  .den-status{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;}
+  .s-resolvida{background:#dcfce7;color:#15803d;} .s-arquivada{background:#f3f4f6;color:#6b7280;}
+  .tag-inativo{background:#fee2e2;color:#b91c1c;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;}
+
+  /* Modo apresentação */
+  .apresentacao-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px 20px;
+    margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .apresentacao-box .txt strong{display:block;color:#1e293b;font-size:15px;}
+  .apresentacao-box .txt span{color:#64748b;font-size:13px;}
+  .ff-switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+  .ff-switch-trilho{position:relative;width:44px;height:24px;background:#cbd5e1;border-radius:999px;
+    transition:background .2s;flex-shrink:0;}
+  .ff-switch-trilho.ativo{background:#2563eb;}
+  .ff-switch-bola{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;
+    border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s;}
+  .ff-switch-trilho.ativo .ff-switch-bola{left:23px;}
+ </style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Painel administrativo da plataforma.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+ <div class="nav-links">
+  <a href="index.html">Início</a>
+  <a href="index.html#sobre">Sobre</a>
+  <a href="index.html#servicos">Serviços</a>
+  <a href="index.html#beneficios">Benefícios</a>
+  <a href="index.html#footer">Contato</a>
+  <a href="termos.html">Termos de uso</a>
+  <a href="privacidade.html">Privacidade</a>
+  <a href="index.html#como-funciona">Como Funciona</a>
+  <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+  <div class="search-bar">
+   <label for="buscaNav" class="sr-only">Buscar</label>
+   <input type="text" id="buscaNav" placeholder="Buscar...">
+   <button class="search-btn" aria-label="Buscar"></button>
+  </div>
+  <div id="userArea"></div>
+ </div>
+</nav>
+
+<main class="adm-wrap" id="conteudo">
+ <div class="adm-head">
+  <h2>Painel Administrativo</h2>
+  <p>Visão geral da plataforma FreelaFree.</p>
+ </div>
+
+ <div class="apresentacao-box">
+  <div class="txt">
+   <strong>Modo apresentação</strong>
+   <span>Borra os nomes de empresas exibidos no site — use na banca ou em qualquer apresentação pública.</span>
+  </div>
+  <div class="ff-switch" id="toggleApresentacao" role="switch" aria-checked="false" tabindex="0" aria-label="Ativar modo apresentação">
+   <div class="ff-switch-trilho" id="trilhoApresentacao"><div class="ff-switch-bola"></div></div>
+  </div>
+ </div>
+
+ <div id="conteudoPainel">
+  <div class="vazio">Carregando estatísticas...</div>
+ </div>
+
+ <div class="painel" style="margin-top:26px;">
+  <h3 style="display:flex;align-items:center;gap:10px;">
+   Moderação — Denúncias
+   <span id="badgePend" style="background:#dc2626;color:#fff;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;display:none;"></span>
+  </h3>
+  <div class="abas-den">
+   <button class="aba-den ativa" data-st="pendente"  onclick="trocarAba('pendente', this)">Pendentes</button>
+   <button class="aba-den"       data-st="resolvida" onclick="trocarAba('resolvida', this)">Resolvidas</button>
+   <button class="aba-den"       data-st="arquivada" onclick="trocarAba('arquivada', this)">Arquivadas</button>
+  </div>
+  <div id="listaDenuncias"><div class="vazio">Carregando denúncias...</div></div>
+ </div>
+</main>
+
+<footer id="footer">
+ <div class="footer-contato">
+  <p>Freelafree3@gmail.com</p>
+  <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+   <img src="instagram.svg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+  </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script src="denuncia.js"></script>
+<script>
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const e = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!e));
+});
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function barras(itens, campoRotulo) {
+ if (!itens || !itens.length) return '<div class="vazio">Sem dados ainda.</div>';
+ const max = Math.max(...itens.map(i => Number(i.total) || 0), 1);
+ return itens.map(i => {
+  const rot = esc(i[campoRotulo] || '—').replace(/_/g, ' ');
+  const val = Number(i.total) || 0;
+  const pct = (val / max) * 100;
+  return `<div class="barra-linha">
+    <span class="barra-rot">${rot}</span>
+    <span class="barra-fundo"><span class="barra-fill" style="width:${pct}%"></span></span>
+    <span class="barra-val">${val}</span>
+  </div>`;
+ }).join('');
+}
+
+function sparkline(itens) {
+ if (!itens || !itens.length) return '<div class="vazio">Sem dados nos últimos 14 dias.</div>';
+ const max = Math.max(...itens.map(i => Number(i.total) || 0), 1);
+ return '<div class="spark">' + itens.map(i => {
+  const val = Number(i.total) || 0;
+  const h = Math.max((val / max) * 100, 3);
+  const d = new Date(i.dia);
+  const rot = isNaN(d) ? '' : String(d.getUTCDate()).padStart(2,'0');
+  return `<div class="spark-col" title="${val}">
+    <div class="spark-b" style="height:${h}%"></div>
+    <div class="spark-d">${rot}</div>
+  </div>`;
+ }).join('') + '</div>';
+}
+
+async function carregar() {
+ const box = document.getElementById('conteudoPainel');
+ let d;
+ try {
+  d = await ApiAdmin.stats();
+ } catch (err) {
+  box.innerHTML = '<div class="erro-box">Acesso restrito a administradores. ' +
+                  'Se você é admin, faça login novamente.</div>';
+  return;
+ }
+ const t = d.totais || {};
+ box.innerHTML = `
+  <div class="cards">
+   <div class="card-num"><div class="n">${t.total_usuarios ?? 0}</div><div class="l">Usuários</div></div>
+   <div class="card-num"><div class="n">${t.total_projetos ?? 0}</div><div class="l">Projetos</div></div>
+   <div class="card-num"><div class="n">${t.total_propostas ?? 0}</div><div class="l">Propostas</div></div>
+   <div class="card-num"><div class="n">${t.total_matches ?? 0}</div><div class="l">Contratações</div></div>
+   <div class="card-num"><div class="n">${t.total_mensagens ?? 0}</div><div class="l">Mensagens</div></div>
+  </div>
+
+  <div class="grade2">
+   <div class="painel">
+    <h3>Projetos por categoria</h3>
+    ${barras(d.porCategoria, 'categoria')}
+   </div>
+   <div class="painel">
+    <h3>Projetos por status</h3>
+    ${barras(d.porStatus, 'status')}
+   </div>
+  </div>
+
+  <div class="painel">
+   <h3>Usuários por perfil</h3>
+   ${barras(d.porPerfil, 'perfil')}
+  </div>
+
+  <div class="grade2">
+   <div class="painel">
+    <h3>Cadastros (últimos 14 dias)</h3>
+    ${sparkline(d.cadastrosPorDia)}
+   </div>
+   <div class="painel">
+    <h3>Projetos criados (últimos 14 dias)</h3>
+    ${sparkline(d.projetosPorDia)}
+   </div>
+  </div>`;
+}
+
+// ── MODERAÇÃO ───────────────────────────────────────────────
+let abaAtual = 'pendente';
+
+const MOTIVO_TXT = {
+ spam:'Spam ou propaganda', fraude:'Fraude ou golpe', ofensivo:'Conteúdo ofensivo',
+ conteudo_inadequado:'Conteúdo inadequado', fora_da_plataforma:'Negociação fora da plataforma',
+ outro:'Outro motivo'
+};
+const ACAO_TXT = {
+ nenhuma:'Sem providência', desativar_usuario:'Usuário desativado', cancelar_projeto:'Projeto cancelado'
+};
+
+function trocarAba(st, el) {
+ abaAtual = st;
+ document.querySelectorAll('.aba-den').forEach(a => a.classList.remove('ativa'));
+ el.classList.add('ativa');
+ carregarDenuncias();
+}
+
+function dataBr(d) {
+ if (!d) return '';
+ const x = new Date(d);
+ return isNaN(x) ? '' : x.toLocaleDateString('pt-BR') + ' ' +
+   String(x.getHours()).padStart(2,'0') + ':' + String(x.getMinutes()).padStart(2,'0');
+}
+
+function descreverAlvo(d) {
+ if (d.tipo === 'projeto') {
+  return `<strong>Projeto:</strong> ${esc(d.projeto_titulo || '(removido)')}` +
+         (d.projeto_status ? ` <span class="den-meta">(${esc(d.projeto_status).replace('_',' ')})</span>` : '');
+ }
+ if (d.tipo === 'usuario') {
+  const inativo = Number(d.alvo_ativo) === 0 ? ' <span class="tag-inativo">desativado</span>' : '';
+  return `<strong>Usuário:</strong> ${esc((d.alvo_nome || '') + ' ' + (d.alvo_sobrenome || ''))}${inativo}`;
+ }
+ if (d.tipo === 'mensagem') {
+  return `<strong>Mensagem:</strong> “${esc(d.mensagem_conteudo || '(removida)')}”`;
+ }
+ return '';
+}
+
+async function carregarDenuncias() {
+ const box = document.getElementById('listaDenuncias');
+ let r;
+ try {
+  r = await ApiDenuncias.listar(abaAtual);
+ } catch (err) {
+  box.innerHTML = '<div class="erro-box">Erro ao carregar denúncias.</div>';
+  return;
+ }
+
+ // badge de pendentes
+ const pend = (r.contagem || []).find(c => c.status === 'pendente');
+ const badge = document.getElementById('badgePend');
+ if (pend && Number(pend.total) > 0) { badge.textContent = pend.total; badge.style.display = 'inline-block'; }
+ else badge.style.display = 'none';
+
+ const lista = r.denuncias || [];
+ if (!lista.length) {
+  box.innerHTML = `<div class="vazio">Nenhuma denúncia ${abaAtual === 'pendente' ? 'pendente' : abaAtual}.</div>`;
+  return;
+ }
+
+ box.innerHTML = lista.map(d => {
+  const acoes = d.status === 'pendente' ? `
+    <div class="den-acoes">
+     <button class="den-btn b-resolver" onclick="resolver(${d.id},'nenhuma')">Resolver (sem ação)</button>
+     ${d.tipo === 'projeto' ? `<button class="den-btn b-cancelar" onclick="resolver(${d.id},'cancelar_projeto')">Cancelar projeto</button>` : ''}
+     <button class="den-btn b-banir" onclick="resolver(${d.id},'desativar_usuario')">Desativar usuário</button>
+     <button class="den-btn b-arquivar" onclick="arquivar(${d.id})">Arquivar</button>
+    </div>` : `
+    <div class="den-acoes">
+     <span class="den-status s-${d.status}">${d.status}${d.acao_tomada ? ' · ' + (ACAO_TXT[d.acao_tomada] || d.acao_tomada) : ''}</span>
+     ${(d.tipo === 'usuario' && Number(d.alvo_ativo) === 0)
+        ? `<button class="den-btn b-reativar" onclick="reativar(${d.alvo_id})">Reativar usuário</button>` : ''}
+    </div>`;
+
+  return `<div class="den-item">
+    <div class="den-topo">
+     <span><span class="den-tipo t-${d.tipo}">${d.tipo}</span> <span class="den-motivo">${esc(MOTIVO_TXT[d.motivo] || d.motivo)}</span></span>
+     <span class="den-meta">#${d.id} · ${dataBr(d.criado_em)}</span>
+    </div>
+    <div class="den-alvo">${descreverAlvo(d)}</div>
+    <div class="den-desc">${esc(d.descricao)}</div>
+    <div class="den-meta">Denunciado por: ${esc((d.denunciante_nome || '') + ' ' + (d.denunciante_sobrenome || ''))}</div>
+    ${acoes}
+   </div>`;
+ }).join('');
+}
+
+async function resolver(id, acao) {
+ const txt = { nenhuma:'Marcar como resolvida, sem providência?',
+               desativar_usuario:'Desativar o usuário responsável? Ele não conseguirá mais fazer login.',
+               cancelar_projeto:'Cancelar este projeto? Ele sai do ar.' }[acao];
+ if (typeof ffConfirm === 'function' ? !(await ffConfirm(txt, 'Resolver denúncia')) : !confirm(txt)) return;
+ try {
+  await ApiDenuncias.resolver(id, acao);
+  ffToast('Denúncia resolvida.', 'ok');
+  carregarDenuncias();
+  carregar();
+ } catch (err) { ffToast(err.message || 'Erro ao resolver.', 'erro'); }
+}
+
+async function arquivar(id) {
+ try {
+  await ApiDenuncias.arquivar(id);
+  ffToast('Denúncia arquivada.', 'ok');
+  carregarDenuncias();
+ } catch (err) { ffToast(err.message || 'Erro ao arquivar.', 'erro'); }
+}
+
+async function reativar(usuarioId) {
+ try {
+  await ApiDenuncias.reativarUsuario(usuarioId);
+  ffToast('Usuário reativado.', 'ok');
+  carregarDenuncias();
+ } catch (err) { ffToast(err.message || 'Erro ao reativar.', 'erro'); }
+}
+
+// ── Modo apresentação (toggle) ─────────────────────────────
+function atualizarSwitchApresentacao() {
+ const ativo = window.ffApresentacaoAtiva();
+ document.getElementById('trilhoApresentacao')?.classList.toggle('ativo', ativo);
+ document.getElementById('toggleApresentacao')?.setAttribute('aria-checked', String(ativo));
+}
+function alternarApresentacao() {
+ window.ffSetApresentacao(!window.ffApresentacaoAtiva());
+ atualizarSwitchApresentacao();
+ ffToast(window.ffApresentacaoAtiva() ? 'Modo apresentação ativado.' : 'Modo apresentação desativado.', 'ok');
+}
+document.getElementById('toggleApresentacao')?.addEventListener('click', alternarApresentacao);
+document.getElementById('toggleApresentacao')?.addEventListener('keydown', (e) => {
+ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternarApresentacao(); }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+ if (typeof Auth === 'undefined' || !Auth.logado()) {
+  window.location.href = 'login.html';
+  return;
+ }
+ atualizarSwitchApresentacao();
+ carregar();
+ carregarDenuncias();
+});
+</script>
+<script src="transitions.js"></script>
+</body>
+</html>

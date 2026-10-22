@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mensagens - FreelaFree</title>
+ <meta name="description" content="Converse e negocie com freelancers e contratantes na FreelaFree.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="Mensagens — FreelaFree">
+ <meta property="og:description" content="Converse e negocie com freelancers e contratantes na FreelaFree.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Mensagens — FreelaFree">
+ <meta name="twitter:description" content="Converse e negocie com freelancers e contratantes na FreelaFree.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+ /* ===== SISTEMA DE AVALIAÇÃO ===== */
+ .avaliacao-section {
+ margin: 18px 0 10px;
+ padding: 18px;
+ background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+ border-radius: 14px;
+ border: 1.5px solid #bfdbfe;
+ }
+ .avaliacao-titulo {
+ font-size: 14px;
+ font-weight: 700;
+ color: #1e3a8a;
+ margin-bottom: 4px;
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ }
+ .avaliacao-subtitulo {
+ font-size: 12px;
+ color: #6b7280;
+ margin-bottom: 14px;
+ }
+ .estrelas-wrap {
+ display: flex;
+ gap: 6px;
+ justify-content: center;
+ margin-bottom: 10px;
+ }
+ .estrela {
+ font-size: 36px;
+ cursor: pointer;
+ color: #d1d5db;
+ transition: color 0.15s, transform 0.15s;
+ line-height: 1;
+ user-select: none;
+ }
+ .estrela:hover,
+ .estrela.hover {
+ color: #fbbf24;
+ transform: scale(1.2);
+ }
+ .estrela.selecionada {
+ color: #f59e0b;
+ transform: scale(1.1);
+ }
+ .nota-label {
+ text-align: center;
+ font-size: 13px;
+ font-weight: 600;
+ color: #374151;
+ min-height: 20px;
+ margin-bottom: 8px;
+ transition: all 0.2s;
+ }
+ .avaliacao-comentario {
+ width: 100%;
+ border: 1.5px solid #d1d5db;
+ border-radius: 8px;
+ padding: 9px 12px;
+ font-size: 13px;
+ resize: none;
+ outline: none;
+ background: #fff;
+ color: #374151;
+ box-sizing: border-box;
+ transition: border-color 0.2s;
+ font-family: inherit;
+ }
+ .avaliacao-comentario:focus {
+ border-color: #2563eb;
+ box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+ }
+ /* estrelas no perfil do chat (header) */
+ .chat-avaliacao {
+ display: flex;
+ align-items: center;
+ gap: 3px;
+ font-size: 12px;
+ color: #f59e0b;
+ margin-top: 2px;
+ }
+ .chat-avaliacao-num {
+ color: #6b7280;
+ font-size: 11px;
+ margin-left: 2px;
+ }
+ /* estrelas no card de match */
+ .star-row {
+ display: flex;
+ align-items: center;
+ gap: 2px;
+ font-size: 14px;
+ }
+ .star-filled { color: #f59e0b; }
+ .star-empty { color: #d1d5db; }
+ /* balão de avaliação no chat */
+ .balao-avaliacao {
+ background: linear-gradient(135deg, #fff7ed, #fef3c7);
+ border: 1.5px solid #fcd34d;
+ border-radius: 14px 14px 4px 14px;
+ padding: 12px 16px;
+ max-width: 280px;
+ }
+ .balao-av-header {
+ font-size: 12px;
+ font-weight: 700;
+ color: #92400e;
+ margin-bottom: 6px;
+ display: flex;
+ align-items: center;
+ gap: 5px;
+ }
+ .balao-av-estrelas {
+ font-size: 20px;
+ letter-spacing: 2px;
+ margin-bottom: 4px;
+ }
+ .balao-av-nota {
+ font-size: 12px;
+ color: #78350f;
+ font-weight: 600;
+ }
+ .balao-av-comentario {
+ font-size: 12px;
+ color: #92400e;
+ margin-top: 4px;
+ font-style: italic;
+ }
+
+ /* ===== MODAL DE PAGAMENTO (CSS estava ausente) ===== */
+ .modal-pagamento{
+   position:fixed; inset:0; z-index:9999;
+   background:rgba(15,23,42,.65); backdrop-filter:blur(3px);
+   display:none; align-items:center; justify-content:center; padding:20px;
+ }
+ .modal-pagamento.ativo{ display:flex; }
+ .modal-pag-box{
+   background:#fff; border-radius:16px; width:100%; max-width:480px;
+   max-height:90vh; overflow-y:auto; padding:22px;
+   box-shadow:0 20px 60px rgba(0,0,0,.3);
+ }
+ .pag-header{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+ .pag-header h3{ margin:0; font-size:19px; color:#0f172a; }
+ .pag-subtitulo{ margin:2px 0 0; font-size:13px; color:#64748b; }
+ .pag-fechar{
+   margin-left:auto; border:none; background:#f1f5f9; cursor:pointer;
+   width:30px; height:30px; border-radius:50%; font-size:16px; color:#475569;
+ }
+ .pag-fechar::before{ content:"✕"; }
+ .pag-fechar:hover{ background:#e2e8f0; }
+
+ .pag-resumo{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:16px; }
+ .pag-resumo-titulo{ font-size:12px; font-weight:700; text-transform:uppercase; color:#64748b; margin-bottom:10px; letter-spacing:.5px; }
+ .pag-resumo-row{ display:flex; justify-content:space-between; font-size:14px; padding:5px 0; color:#334155; }
+ .pag-resumo-row.pag-total{ border-top:1px solid #e2e8f0; margin-top:6px; padding-top:9px; font-size:15px; }
+
+ /* Repasse / comissão */
+ .pag-repasse{ border:1px solid #bfdbfe; background:#eff6ff; border-radius:12px; padding:14px; margin-bottom:16px; }
+ .pag-repasse-titulo{ font-size:12px; font-weight:700; text-transform:uppercase; color:#1e40af; margin-bottom:10px; letter-spacing:.5px; }
+ .pag-repasse-row{ display:flex; justify-content:space-between; font-size:14px; padding:5px 0; color:#1e3a8a; }
+ .pag-repasse-row.taxa{ color:#b45309; }
+ .pag-repasse-row.liquido{
+   border-top:1px dashed #93c5fd; margin-top:6px; padding-top:9px;
+   font-weight:700; font-size:16px; color:#065f46;
+ }
+ .pag-repasse-row.total-pagar{
+   border-top:2px solid #93c5fd; margin-top:6px; padding-top:9px;
+   font-weight:700; font-size:16px; color:#1e3a8a;
+ }
+ .pag-economia{
+   margin-top:10px; padding:8px 10px; background:#ecfdf5; border:1px solid #6ee7b7;
+   border-radius:8px; font-size:12px; color:#065f46; text-align:center;
+ }
+
+ .mp-campo{ margin-bottom:14px; }
+ .mp-campo label{ display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px; }
+ .mp-campo input, .mp-campo textarea{
+   width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;
+   font-size:14px; font-family:inherit; box-sizing:border-box;
+ }
+ .mp-campo input:focus, .mp-campo textarea:focus{ outline:none; border-color:#2563eb; }
+ .pag-hint{ display:block; font-size:12px; color:#94a3b8; margin-top:4px; }
+
+ .pag-metodos{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+ .pag-metodo{
+   border:2px solid #e2e8f0; border-radius:10px; padding:10px 4px; text-align:center;
+   cursor:pointer; font-size:13px; color:#475569; transition:.15s;
+ }
+ .pag-metodo:hover{ border-color:#93c5fd; }
+ .pag-metodo.selected{ border-color:#2563eb; background:#eff6ff; color:#1d4ed8; font-weight:600; }
+
+ .pag-aviso{
+   background:#fff7ed; border:1px solid #fdba74; color:#9a3412;
+   padding:10px 12px; border-radius:8px; font-size:13px; margin-bottom:14px;
+ }
+
+ .mp-btns{ display:flex; gap:10px; margin-top:16px; }
+ .btn-cancelar-mp, .btn-confirmar-pag{
+   flex:1; padding:11px; border-radius:8px; font-size:14px;
+   font-weight:600; cursor:pointer; border:none; font-family:inherit;
+ }
+ .btn-cancelar-mp{ background:#f1f5f9; color:#475569; }
+ .btn-cancelar-mp:hover{ background:#e2e8f0; }
+ .btn-confirmar-pag{ background:#059669; color:#fff; }
+ .btn-confirmar-pag:hover{ background:#047857; }
+ .btn-confirmar-pag:disabled{ background:#94a3b8; cursor:not-allowed; }
+
+ .pag-sucesso{ text-align:center; padding:10px 0; }
+
+ .pag-sucesso h4{ margin:10px 0 6px; font-size:18px; color:#065f46; }
+ .pag-sucesso p{ margin:0; font-size:14px; color:#64748b; }
+
+ .atalho-pagar{
+   background:#059669; color:#fff; border:none; padding:8px 14px;
+   border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;
+ }
+ .atalho-pagar:hover{ background:#047857; }
+ .atalho-avaliar{
+   background:#f59e0b; color:#fff; border:none; padding:8px 14px;
+   border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;
+ }
+ .atalho-avaliar:hover{ background:#d97706; }
+
+ /* Banner de avaliação pendente — aparece após a conclusão do projeto */
+ .aval-banner{
+   display:none; align-items:center; gap:12px; flex-wrap:wrap;
+   margin:10px 14px; padding:14px 16px; border-radius:12px;
+   background:linear-gradient(135deg,#fffbeb,#fef3c7);
+   border:1px solid #fcd34d;
+ }
+ .aval-banner.ativo{ display:flex; }
+ .aval-banner-icone{ font-size:26px; line-height:1; }
+ .aval-banner-txt{ flex:1; min-width:180px; }
+ .aval-banner-titulo{ font-weight:700; color:#92400e; font-size:14px; }
+ .aval-banner-sub{ font-size:13px; color:#a16207; margin-top:2px; }
+ .aval-banner-btn{
+   background:#f59e0b; color:#fff; border:none; padding:9px 18px;
+   border-radius:8px; font-weight:700; font-size:13px; cursor:pointer;
+ }
+ .aval-banner-btn:hover{ background:#d97706; }
+ /* Botão voltar (mobile) — o layout mobile em si já vem do style.css */
+ .btn-voltar-mobile {
+   display: none;
+   align-items: center; justify-content: center;
+   background: none; border: none; font-size: 24px; color: #1e3a8a;
+   cursor: pointer; margin-right: 6px; padding: 4px 8px; line-height: 1;
+ }
+ @media (max-width: 640px) {
+   .btn-voltar-mobile { display: inline-flex; }
+   /* No mobile a lista de conversas é a tela inicial;
+      o "Selecione uma conversa" não deve ocupar a tela toda. */
+   .chat-vazio { display: none !important; }
+ }
+
+ /* ===== CONVERSAS FINALIZADAS ===== */
+ .selo-final {
+   background: #dcfce7; color: #15803d;
+   font-size: 10px; font-weight: 700; letter-spacing: .3px;
+   padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+ }
+ .conversa-item.finalizada { background: #fafafa; }
+ .conversa-item.finalizada .conversa-nome { color: #64748b; }
+ .conversa-item.finalizada .avatar { filter: grayscale(.35); opacity: .85; }
+ .chat-encerrado {
+   background: #f0fdf4; border-top: 1px solid #bbf7d0; color: #15803d;
+   padding: 14px 18px; text-align: center; font-size: 14px; font-weight: 600;
+ }
+ .chat-encerrado span { display: block; font-weight: 400; font-size: 12.5px; color: #4b7a5c; margin-top: 2px; }
+  .btn-acao-chat{
+   display:flex; align-items:center; justify-content:center;
+   width:34px; height:34px; border-radius:50%; border:1px solid #e2e8f0;
+   background:#fff; color:#1e3a8a; cursor:pointer; flex-shrink:0;
+   transition:background .15s, border-color .15s;
+ }
+ .btn-acao-chat:hover{ background:#eff6ff; border-color:#2563eb; }
+</style>
+</head>
+<body>
+
+<header style="padding: 30px 20px;">
+ <h1><a href="index.html" style="color:inherit;text-decoration:none;cursor:pointer;">FreelaFree</a></h1>
+ <p>Mensagens</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
+ <div class="nav-links">
+ <a href="index.html">Início</a>
+ <a href="index.html#sobre">Sobre</a>
+ <a href="index.html#servicos">Serviços</a>
+ <a href="index.html#beneficios">Benefícios</a>
+ <a href="index.html#footer">Contato</a>
+ <a href="termos.html">Termos de uso</a>
+ <a href="privacidade.html">Privacidade</a>
+ <a href="index.html#como-funciona">Como Funciona</a>
+ <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+ <div class="search-bar">
+ 
+ <input type="text" placeholder="Buscar...">
+ <button class="search-btn"></button>
+ </div>
+ <div id="userArea">
+ <a href="login.html" class="btn-login">Login</a>
+ <a href="cadastro.html" class="btn-cadastro">Cadastrar</a>
+ </div>
+ </div>
+</nav>
+
+<div class="chat-page">
+
+ <!-- SIDEBAR -->
+ <div class="sidebar" id="sidebar">
+ <div class="sidebar-header">
+ <h3>Mensagens</h3>
+ <div class="sidebar-search">
+ <span class="icon-busca">Buscar</span>
+ <input type="text" placeholder="Buscar conversa..." id="buscaConversa">
+ </div>
+ </div>
+
+ <div class="sidebar-tabs">
+ <div class="sidebar-tab ativo" onclick="filtrarTab('todas', this)">Todas</div>
+ <div class="sidebar-tab" onclick="filtrarTab('nao-lidas', this)">Não lidas</div>
+ <div class="sidebar-tab" onclick="filtrarTab('finalizadas', this)">Finalizadas</div>
+ </div>
+
+ <div class="conversa-lista" id="conversaLista">
+ <!-- Injetadas via JS -->
+ </div>
+ </div>
+
+ <!-- CHAT (vazio por padrão) -->
+ <div class="chat-vazio" id="chatVazio">
+ <div class="icone-vazio"></div>
+ <h3>Selecione uma conversa</h3>
+ <p>Escolha um contato para começar a negociar.</p>
+ </div>
+
+ <div class="chat-area" id="chatArea" style="display:none;">
+ <!-- Header -->
+ <div class="chat-header">
+ <button class="btn-voltar-mobile" onclick="voltarLista()" aria-label="Voltar para conversas">&#8592;</button>
+ <div class="avatar" id="headerAvatar" style="width:40px;height:40px;font-size:15px;"></div>
+ <div class="chat-header-info">
+ <div class="chat-nome" id="headerNome">—</div>
+ <div class="chat-avaliacao" id="headerAvaliacao" style="display:none;">
+ <span id="headerEstrelas"></span>
+ <span class="chat-avaliacao-num" id="headerNotaNum"></span>
+ </div>
+ <div class="chat-status" id="headerStatus">online</div>
+ </div>
+ <div class="chat-projeto" id="headerProjeto"></div>
+ <div class="chat-acoes">
+ <button class="btn-acao-chat" title="Informações" onclick="togglePainel()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+   <path d="M12 11v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+   <circle cx="12" cy="7.7" r="1.15" fill="currentColor"/>
+  </svg>
+ </button>
+ </div>
+ </div>
+
+ <!-- Banner: pedir avaliação após o projeto ser concluído -->
+ <div class="aval-banner" id="avalBanner">
+  <div class="aval-banner-icone"></div>
+  <div class="aval-banner-txt">
+   <div class="aval-banner-titulo" id="avalBannerTitulo">Projeto concluído!</div>
+   <div class="aval-banner-sub" id="avalBannerSub">Avalie como foi a experiência.</div>
+  </div>
+  <button class="aval-banner-btn" onclick="abrirModalAvaliar()">Avaliar agora</button>
+ </div>
+
+ <!-- Mensagens -->
+ <div class="mensagens-wrap" id="mensagensWrap">
+ <!-- injetadas via JS -->
+ </div>
+
+ <!-- Input -->
+ <div class="chat-input-area">
+ <div class="atalhos-rapidos">
+ <button class="atalho-btn atalho-pagar" id="btnEncerrarPagar" onclick="abrirModalPagamento()" style="display:none;">Encerrar e Pagar</button>
+ <button class="atalho-btn atalho-avaliar" id="btnAvaliar" onclick="abrirModalAvaliar()" style="display:none;">Avaliar</button>
+ <button class="atalho-btn" onclick="inserirTexto('Olá! Tenho interesse no projeto. ')">Interesse</button>
+ <button class="atalho-btn" onclick="inserirTexto('Podemos agendar uma reunião? ')">Reunião</button>
+ <button class="atalho-btn" onclick="inserirTexto('Pode me passar mais detalhes? ')">Detalhes</button>
+ <button class="atalho-btn" id="btnDenunciarUsuario" onclick="denunciarUsuarioAtivo()" style="display:none;color:#b91c1c;">⚑ Denunciar</button>
+ </div>
+ <div class="chat-encerrado" id="chatEncerrado" style="display:none;">
+ Projeto finalizado
+ <span>O pagamento foi concluído e esta conversa está encerrada.</span>
+ </div>
+ <div class="anexo-progress" id="anexoProgress" style="display:none;font-size:12px;color:#64748b;padding:2px 4px 6px;"></div>
+ <div class="input-row" id="inputRow">
+ <input type="file" id="anexoInput" hidden onchange="enviarAnexo(event)">
+ <button class="btn-anexo" title="Anexar arquivo" onclick="document.getElementById('anexoInput').click()">
+ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+ </svg>
+ </button>
+ <div class="input-msg-wrap">
+ <textarea id="campoMensagem" rows="1" placeholder="Digite uma mensagem..." onkeydown="teclaEnter(event)" oninput="autoResize(this)"></textarea>
+ <button class="btn-emoji"></button>
+ </div>
+ <button class="btn-enviar" onclick="enviarMensagem()">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+ <line x1="22" y1="2" x2="11" y2="13"></line>
+ <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+ </svg>
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <!-- PAINEL DIREITO -->
+ <div class="painel-info" id="painelInfo" style="display:none;">
+ <div class="painel-titulo">Detalhes do Projeto</div>
+
+ <div class="painel-secao">
+ <h4>Projeto</h4>
+ <div class="info-row">
+ <span>Título</span>
+ <span id="pnTitulo">—</span>
+ </div>
+ <div class="info-row">
+ <span>Categoria</span>
+ <span id="pnCategoria">—</span>
+ </div>
+ <div class="info-row">
+ <span>Orçamento</span>
+ <span id="pnOrcamento">—</span>
+ </div>
+ <div class="info-row">
+ <span>Prazo</span>
+ <span id="pnPrazo">—</span>
+ </div>
+ <div class="info-row">
+ <span>Status</span>
+ <span class="status-pill status-em-andamento" id="pnStatus">Em andamento</span>
+ </div>
+ </div>
+
+ <div class="painel-secao">
+ <h4>Contato</h4>
+ <div class="perfil-mini" id="pnPerfil"></div>
+ <a href="#" class="btn-ver-perfil">Ver perfil completo</a>
+ </div>
+
+ <div class="painel-secao">
+ <h4>Arquivos compartilhados</h4>
+ <div style="font-size:13px;color:#9ca3af;text-align:center;padding:10px 0;">Nenhum arquivo ainda.</div>
+ </div>
+
+ <button class="btn-encerrar" onclick="confirmarEncerramento()">Fechar negociação</button>
+ </div>
+</div>
+
+<!-- MODAL PROPOSTA -->
+<div class="modal-proposta" id="modalProposta">
+ <div class="modal-prop-box">
+ <h3>Enviar proposta</h3>
+
+ <div class="mp-campo">
+ <label>Valor proposto (R$)</label>
+ <input type="number" id="propValor" placeholder="Ex: 1500" min="0">
+ </div>
+
+ <div class="mp-campo">
+ <label>Prazo de entrega</label>
+ <select id="propPrazo">
+ <option>Até 3 dias</option>
+ <option>1 semana</option>
+ <option>2 semanas</option>
+ <option>1 mês</option>
+ <option>A combinar</option>
+ </select>
+ </div>
+
+ <div class="mp-campo">
+ <label>Mensagem (opcional)</label>
+ <textarea id="propMsg" placeholder="Descreva brevemente sua proposta..."></textarea>
+ </div>
+
+ <div class="mp-btns">
+ <button class="btn-cancelar-mp" onclick="fecharModalProposta()">Cancelar</button>
+ <button class="btn-enviar-prop" onclick="enviarProposta()">Enviar proposta</button>
+ </div>
+ </div>
+</div>
+
+<!-- MODAL PAGAMENTO -->
+<div class="modal-pagamento" id="modalPagamento">
+ <div class="modal-pag-box">
+
+ <div class="pag-header">
+ <div class="pag-icone"></div>
+ <div>
+ <h3>Finalizar serviço e pagar</h3>
+ <p class="pag-subtitulo">Confirme o pagamento para liberar ao freelancer</p>
+ </div>
+ <button class="pag-fechar" onclick="fecharModalPagamento()"></button>
+ </div>
+
+ <div id="pagFormView">
+ <div class="pag-resumo" id="pagResumo">
+ <div class="pag-resumo-titulo">Resumo do serviço</div>
+ <div class="pag-resumo-row"><span>Projeto</span><strong id="pagProjeto">—</strong></div>
+ <div class="pag-resumo-row"><span>Freelancer</span><strong id="pagFreelancer">—</strong></div>
+ <div class="pag-resumo-row"><span>Orçamento anunciado</span><strong id="pagOrcamento">—</strong></div>
+ <div class="pag-resumo-row pag-total"><span>Valor acordado na proposta</span><strong id="pagValor">—</strong></div>
+ </div>
+
+ <div class="mp-campo">
+ <label>Valor acordado na proposta (R$)</label>
+ <input type="number" id="pagValorInput" min="0" readonly>
+ <span class="pag-hint">Definido pela proposta aceita. O freelancer recebe este valor integralmente; a taxa de 5% é acrescentada ao seu total.</span>
+ </div>
+
+ <!-- DETALHAMENTO — taxa de 5% paga pelo CONTRATANTE -->
+ <div class="pag-repasse">
+ <div class="pag-repasse-titulo">Detalhamento do pagamento</div>
+ <div class="pag-repasse-row">
+ <span>Valor acordado na proposta</span><strong id="repAcordado">R$ 0,00</strong>
+ </div>
+ <div class="pag-repasse-row liquido">
+ <span>Freelancer recebe (100%)</span><strong id="repLiquido">R$ 0,00</strong>
+ </div>
+ <div class="pag-repasse-row taxa">
+ <span>Taxa FreelaFree (5%)</span><strong id="repTaxa">+ R$ 0,00</strong>
+ </div>
+ <div class="pag-repasse-row total-pagar">
+ <span>Total a desembolsar</span><strong id="repTotal">R$ 0,00</strong>
+ </div>
+ <div class="pag-economia" id="repEconomia">
+ A taxa de 5% cobre intermediação, chat, moderação e suporte — e garante que o
+ freelancer receba o valor combinado, sem descontos.
+ </div>
+ </div>
+
+ <div class="mp-campo">
+ <label>Método de pagamento</label>
+ <div class="pag-metodos" id="pagMetodos">
+ <div class="pag-metodo selected" data-val="pix" onclick="selecionarMetodo(this)">
+ <span class="pag-metodo-icon"></span>
+ <span>Pix</span>
+ </div>
+ <div class="pag-metodo" data-val="transferencia" onclick="selecionarMetodo(this)">
+ <span class="pag-metodo-icon"></span>
+ <span>Transferência</span>
+ </div>
+ <div class="pag-metodo" data-val="boleto" onclick="selecionarMetodo(this)">
+ <span class="pag-metodo-icon"></span>
+ <span>Boleto</span>
+ </div>
+ <div class="pag-metodo" data-val="cartao" onclick="selecionarMetodo(this)">
+ <span class="pag-metodo-icon"></span>
+ <span>Cartão</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="mp-campo">
+ <label>Observação (opcional)</label>
+ <textarea id="pagObs" placeholder="Ex: Pagamento referente à entrega final do logo..."></textarea>
+ </div>
+
+ <div class="pag-aviso">
+ ️ Ao confirmar, o serviço será marcado como <strong>concluído</strong> e o freelancer será notificado.
+ </div>
+
+ <!-- AVALIAÇÃO DO FREELANCER -->
+ <div class="avaliacao-section">
+ <div class="avaliacao-titulo"> Avaliar o freelancer</div>
+ <div class="avaliacao-subtitulo">Como foi sua experiência com <span id="avalNome">este freelancer</span>?</div>
+ <div class="estrelas-wrap" id="estrelasWrap">
+ <span class="estrela" data-val="1" onclick="selecionarEstrela(1)" onmouseenter="hoverEstrela(1)" onmouseleave="sairHover()">★</span>
+ <span class="estrela" data-val="2" onclick="selecionarEstrela(2)" onmouseenter="hoverEstrela(2)" onmouseleave="sairHover()">★</span>
+ <span class="estrela" data-val="3" onclick="selecionarEstrela(3)" onmouseenter="hoverEstrela(3)" onmouseleave="sairHover()">★</span>
+ <span class="estrela" data-val="4" onclick="selecionarEstrela(4)" onmouseenter="hoverEstrela(4)" onmouseleave="sairHover()">★</span>
+ <span class="estrela" data-val="5" onclick="selecionarEstrela(5)" onmouseenter="hoverEstrela(5)" onmouseleave="sairHover()">★</span>
+ </div>
+ <div class="nota-label" id="notaLabel">Clique para avaliar</div>
+ <textarea class="avaliacao-comentario" id="avalComentario" rows="2" placeholder="Deixe um comentário (opcional)..."></textarea>
+ </div>
+
+ <div class="mp-btns">
+ <button class="btn-cancelar-mp" onclick="fecharModalPagamento()">Cancelar</button>
+ <button class="btn-confirmar-pag" onclick="confirmarPagamento()">Confirmar pagamento</button>
+ </div>
+ </div>
+
+ <!-- QR CODE PIX (Mercado Pago) -->
+ <div id="pagPixView" style="display:none;">
+   <div style="text-align:center;">
+     <img id="pixQrImg" alt="QR Code Pix" style="width:220px;height:220px;border:1px solid #e2e8f0;border-radius:12px;">
+   </div>
+   <div class="mp-campo" style="margin-top:14px;">
+     <label>Pix copia e cola</label>
+     <textarea id="pixCopiaCola" readonly onclick="this.select()" rows="3" style="font-size:11px;"></textarea>
+   </div>
+   <div id="pixStatus" class="pag-aviso" style="text-align:center;font-weight:700;">
+     Aguardando pagamento…
+   </div>
+   <div class="mp-btns">
+     <button class="btn-cancelar-mp" onclick="cancelarPix()">Cancelar</button>
+   </div>
+ </div>
+
+ <div class="pag-sucesso" id="pagSucessoView" style="display:none;">
+ <h4>Pagamento registrado!</h4>
+ <p id="pagSucessoMsg">O freelancer foi notificado e o serviço foi concluído.</p>
+ <div id="pagSucessoAvaliacao" style="display:none;margin:10px 0 4px;padding:10px 14px;background:#fff7ed;border-radius:10px;border:1px solid #fcd34d;font-size:13px;color:#92400e;text-align:center;">
+ <div style="font-size:20px;margin-bottom:4px;" id="pagSucessoEstrelas"></div>
+ <div id="pagSucessoNota" style="font-weight:600;"></div>
+ </div>
+ <button class="btn-confirmar-pag" style="width:100%;margin-top:8px;" onclick="fecharModalPagamento()">Fechar</button>
+ </div>
+
+ </div>
+</div>
+
+<footer id="footer">
+ <div class="footer-contato">
+ <p>Freelafree3@gmail.com</p>
+ <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration: none; display: inline-block;">
+ <img src="instagram.svg" alt="Instagram" style="width: 36px; height: 36px; border-radius: 8px; display: block;">
+ </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script src="denuncia.js"></script>
+<script>
+// ============================================================
+//  FreelaFree — Mensagens (chat real, ligado ao backend)
+// ============================================================
+
+let euId          = null;
+let conversas     = [];
+let conversaAtiva = null;
+let painelAberto  = false;
+let pollTimer     = null;
+let filtroAtual   = 'todas';
+let ultimasMsgs   = [];
+
+// ── Utilitários ─────────────────────────────────────────────
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+// Nome do outro lado da conversa, borrado no modo apresentação quando é uma empresa (contratante)
+function nomeMarcado(nome, ehEmpresa) {
+  const seguro = escapeHtml(nome);
+  return ehEmpresa ? `<span class="ff-empresa">${seguro}</span>` : seguro;
+}
+function iniciais(nome) {
+  if (!nome) return '?';
+  const p = String(nome).trim().split(/\s+/);
+  return ((p[0]?.[0] || '') + (p[1]?.[0] || '')).toUpperCase() || '?';
+}
+const PALETA = ['#7c3aed','#0891b2','#dc2626','#059669','#d97706','#2563eb','#db2777','#4f46e5'];
+const corDeId = id => PALETA[(Number(id) || 0) % PALETA.length];
+
+// Retorna o conteúdo interno de um avatar: foto (se existir) ou iniciais.
+// Reaproveita a classe .ff-avatar-foto (definida globalmente no ui.js).
+function avatarHtml(fotoUrl, txtIniciais) {
+  if (fotoUrl) {
+    const src = (typeof window.ffFotoUrl === 'function') ? window.ffFotoUrl(fotoUrl) : fotoUrl;
+    return `<img src="${src}" alt="" class="ff-avatar-foto">`;
+  }
+  return escapeHtml(txtIniciais);
+}
+
+function formatHora(dt) {
+  if (!dt) return '';
+  const d = new Date(dt);
+  if (isNaN(d)) return '';
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function formatData(dt) {
+  if (!dt) return '';
+  const d = new Date(dt);
+  if (isNaN(d)) return '';
+  const hoje = new Date();
+  if (d.toDateString() === hoje.toDateString()) return formatHora(dt);
+  return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+}
+
+// ── Carregar conversas (matches) ────────────────────────────
+async function carregarConversas() {
+  try {
+    const matches = await ApiMatches.meus();
+    conversas = matches.map(m => {
+      const souFreela = Number(m.freelancer_id) === Number(euId);
+      const nome      = souFreela ? m.contratante_nome : m.freelancer_nome;
+      const outroId   = souFreela ? m.contratante_id   : m.freelancer_id;
+      return {
+        id: m.id,
+        outroId: Number(outroId),
+        souContratante: !souFreela,
+        ehEmpresa: souFreela, // se eu sou freelancer, o outro lado é o contratante (empresa)
+        nome: nome || 'Usuário',
+        tipo: souFreela ? 'Contratante' : 'Freelancer',
+        avatar: iniciais(nome),
+        fotoUrl: souFreela ? m.contratante_foto_url : m.freelancer_foto_url,
+        cor: corDeId(outroId),
+        naoLidas: Number(m.nao_lidas) || 0,
+        projeto: m.projeto_titulo || 'Projeto',
+        categoria: m.categoria || '—',
+        orcamento: (m.orcamento != null) ? 'R$ ' + Number(m.orcamento).toLocaleString('pt-BR') : '—',
+        orcamentoNum: Number(m.orcamento) || 0,
+        valorAcordado: Number(m.valor_acordado) || 0,
+        prazoAcordado: m.prazo_acordado || null,
+        concluido: m.status === 'concluido',
+        jaAvaliei: Number(m.ja_avaliei) > 0,
+        notaOutro:  souFreela ? (m.contratante_nota ? Number(m.contratante_nota) : null)
+                              : (m.freelancer_nota  ? Number(m.freelancer_nota)  : null),
+        totalAvaliacoesOutro: souFreela ? (Number(m.contratante_avaliacoes) || 0)
+                                        : (Number(m.freelancer_avaliacoes)  || 0),
+        prazo: m.prazo || '—',
+        preview: m.projeto_descricao ? String(m.projeto_descricao).slice(0, 42) : 'Abrir conversa',
+        hora: formatData(m.criado_em)
+      };
+    });
+    aplicarFiltro();
+  } catch (err) {
+    const c = document.getElementById('conversaLista');
+    if (c) c.innerHTML = '<div style="padding:20px;color:#6b7280;font-size:14px;">Não foi possível carregar as conversas. Faça login novamente.</div>';
+    console.error(err);
+  }
+}
+
+function aplicarFiltro() {
+  let lista = conversas;
+  const termo = (document.getElementById('buscaConversa')?.value || '').toLowerCase();
+
+  // Conversas finalizadas (pagas/concluídas) ficam num lugar separado:
+  // só aparecem na aba "Finalizadas".
+  if (filtroAtual === 'finalizadas') lista = lista.filter(c => c.concluido);
+  else                               lista = lista.filter(c => !c.concluido);
+
+  if (filtroAtual === 'nao-lidas') lista = lista.filter(c => c.naoLidas > 0);
+  if (termo) lista = lista.filter(c =>
+    c.nome.toLowerCase().includes(termo) || c.projeto.toLowerCase().includes(termo));
+  renderLista(lista);
+}
+
+function renderLista(lista) {
+  const cont = document.getElementById('conversaLista');
+  if (!cont) return;
+  cont.innerHTML = '';
+  if (!lista.length) {
+    const vazioTxt = filtroAtual === 'finalizadas'
+      ? 'Nenhum projeto finalizado ainda. Quando o pagamento for concluído, a conversa aparece aqui.'
+      : filtroAtual === 'nao-lidas'
+        ? 'Nenhuma mensagem não lida.'
+        : 'Nenhuma conversa em andamento.';
+    cont.innerHTML = '<div style="padding:20px;color:#6b7280;font-size:14px;">' + vazioTxt + '</div>';
+    return;
+  }
+  lista.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'conversa-item' + (conversaAtiva && conversaAtiva.id === c.id ? ' ativa' : '')
+                  + (c.concluido ? ' finalizada' : '');
+    div.onclick = () => abrirConversa(c.id);
+    div.innerHTML = `
+      <div class="avatar" style="background:${c.cor};">${avatarHtml(c.fotoUrl, c.avatar)}</div>
+      <div class="conversa-info">
+        <div class="conversa-nome">${nomeMarcado(c.nome, c.ehEmpresa)}</div>
+        <div class="conversa-preview"${c.naoLidas ? ' style="font-weight:600;color:#374151"' : ''}>${escapeHtml(c.preview)}</div>
+        <div class="projeto-tag">${escapeHtml(c.projeto)}</div>
+      </div>
+      <div class="conversa-meta">
+        <div class="conversa-hora">${escapeHtml(c.hora)}</div>
+        ${c.concluido ? '<div class="selo-final">Finalizado</div>' : ''}
+        ${c.naoLidas ? `<div class="badge-nao-lido">${c.naoLidas}</div>` : ''}
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+// ── Abrir conversa ──────────────────────────────────────────
+async function abrirConversa(id) {
+  conversaAtiva = conversas.find(c => c.id === Number(id));
+  if (!conversaAtiva) return;
+  conversaAtiva.naoLidas = 0;
+  aplicarFiltro();
+
+  const av = document.getElementById('headerAvatar');
+  if (av) {
+    av.style.background = conversaAtiva.cor;
+    av.innerHTML = avatarHtml(conversaAtiva.fotoUrl, conversaAtiva.avatar);
+  }
+  const hn = document.getElementById('headerNome');
+  if (hn) {
+    hn.innerHTML = `<a href="perfil.html?id=${conversaAtiva.outroId}" style="color:inherit;text-decoration:none;">
+      ${nomeMarcado(conversaAtiva.nome, conversaAtiva.ehEmpresa)} <span style="color:#2563eb;font-size:12px;font-weight:600;">ver perfil ›</span></a>`;
+  }
+  const ha = document.getElementById('headerAvaliacao');
+  if (ha) {
+    const nota  = conversaAtiva.notaOutro;
+    const total = conversaAtiva.totalAvaliacoesOutro;
+    if (nota) {
+      const cheias = Math.round(nota);
+      const he = document.getElementById('headerEstrelas');
+      if (he) he.textContent = '★'.repeat(cheias) + '☆'.repeat(5 - cheias);
+      const hnn = document.getElementById('headerNotaNum');
+      if (hnn) hnn.textContent = `${nota.toFixed(1)} (${total})`;
+      ha.style.display = 'flex';
+    } else {
+      ha.style.display = 'none';
+    }
+  }
+  const hs = document.getElementById('headerStatus');
+  if (hs) { hs.textContent = conversaAtiva.tipo; hs.className = 'chat-status offline'; }
+  const hp = document.getElementById('headerProjeto');
+  if (hp) hp.textContent = conversaAtiva.projeto;
+
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('pnTitulo', conversaAtiva.projeto);
+  set('pnCategoria', conversaAtiva.categoria);
+  set('pnOrcamento', conversaAtiva.orcamento);
+  set('pnPrazo', conversaAtiva.prazo);
+  const pns = document.getElementById('pnStatus');
+  if (pns) {
+    if (conversaAtiva.concluido) {
+      pns.textContent = 'Concluído';
+      pns.className = 'status-pill status-concluido';
+    } else {
+      pns.textContent = 'Em andamento';
+      pns.className = 'status-pill status-em-andamento';
+    }
+  }
+  const pnp = document.getElementById('pnPerfil');
+  if (pnp) pnp.innerHTML = `
+    <div class="avatar" style="background:${conversaAtiva.cor};width:36px;height:36px;font-size:13px;">${avatarHtml(conversaAtiva.fotoUrl, conversaAtiva.avatar)}</div>
+    <div>
+      <div class="mini-nome">${nomeMarcado(conversaAtiva.nome, conversaAtiva.ehEmpresa)}</div>
+      <div class="mini-tipo">${escapeHtml(conversaAtiva.tipo)}</div>
+    </div>`;
+
+  document.getElementById('chatVazio').style.display = 'none';
+  document.getElementById('chatArea').style.display = 'flex';
+
+  // Conversa finalizada: some o campo de digitação e os atalhos
+  const encerrada = !!conversaAtiva.concluido;
+  const ir = document.getElementById('inputRow');
+  if (ir) ir.style.display = encerrada ? 'none' : '';
+  const ce = document.getElementById('chatEncerrado');
+  if (ce) ce.style.display = encerrada ? 'block' : 'none';
+  document.querySelectorAll('.atalhos-rapidos .atalho-btn').forEach(b => {
+    if (['btnEncerrarPagar', 'btnAvaliar', 'btnDenunciarUsuario'].includes(b.id)) return;
+    b.style.display = encerrada ? 'none' : '';
+  });
+  // Mobile: o style.css mostra o chat só com a classe 'aberta'
+  document.getElementById('chatArea').classList.add('aberta');
+  document.getElementById('sidebar')?.classList.remove('aberta');
+  if (painelAberto) document.getElementById('painelInfo').style.display = 'flex';
+
+  // "Encerrar e Pagar" só para o contratante, e só se ainda não concluído
+  const bp = document.getElementById('btnEncerrarPagar');
+  if (bp) bp.style.display =
+    (conversaAtiva.souContratante && !conversaAtiva.concluido) ? 'inline-block' : 'none';
+
+  // "Avaliar" — para QUALQUER lado, se o projeto foi concluído e ainda não avaliou.
+  // É assim que o freelancer avalia o contratante.
+  const precisaAvaliar = conversaAtiva.concluido && !conversaAtiva.jaAvaliei;
+  const ba = document.getElementById('btnAvaliar');
+  if (ba) ba.style.display = precisaAvaliar ? 'inline-block' : 'none';
+
+  // Banner destacado — o momento certo de pedir a avaliação é logo após o pagamento.
+  const banner = document.getElementById('avalBanner');
+  if (banner) {
+    banner.classList.toggle('ativo', precisaAvaliar);
+    if (precisaAvaliar) {
+      const t = document.getElementById('avalBannerTitulo');
+      const s = document.getElementById('avalBannerSub');
+      if (conversaAtiva.souContratante) {
+        if (t) t.textContent = 'Projeto concluído!';
+        if (s) s.textContent = `Como foi trabalhar com ${conversaAtiva.nome}? Sua avaliação ajuda outros contratantes.`;
+      } else {
+        const recebido = conversaAtiva.valorAcordado
+          ? ` Você recebeu ${BRL(conversaAtiva.valorAcordado)} (100% do valor proposto).` : '';
+        if (t) t.textContent = 'Pagamento recebido!';
+        if (s) s.innerHTML = `${escapeHtml(recebido)} Avalie ${nomeMarcado(conversaAtiva.nome, conversaAtiva.ehEmpresa)} — sua nota ajuda outros freelancers a escolher bons contratantes.`;
+      }
+    }
+  }
+
+  // Denunciar usuário: sempre disponível na conversa
+  const bd = document.getElementById('btnDenunciarUsuario');
+  if (bd) bd.style.display = 'inline-block';
+
+  // O GET de mensagens já marca como lidas no servidor.
+  // Avisa o badge global qual conversa está aberta (não deve notificar).
+  window.ffConversaAtivaId = conversaAtiva.id;
+  await carregarMensagens();
+  if (typeof window.ffAtualizarBadgeMensagens === 'function') window.ffAtualizarBadgeMensagens();
+
+  iniciarPolling();
+}
+
+// ── Mensagens ───────────────────────────────────────────────
+async function carregarMensagens() {
+  if (!conversaAtiva) return;
+  try {
+    const msgs = await ApiMensagens.doMatch(conversaAtiva.id);
+    ultimasMsgs = msgs;
+    renderMensagens(msgs);
+  } catch (err) {
+    console.error('Erro ao carregar mensagens:', err);
+  }
+}
+
+function renderMensagens(msgs) {
+  const wrap = document.getElementById('mensagensWrap');
+  if (!wrap) return;
+  const perto = (wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight) < 120;
+  wrap.innerHTML = '';
+  if (!msgs || !msgs.length) {
+    wrap.innerHTML = '<div class="msg-sistema"><span>Nenhuma mensagem ainda. Diga olá!</span></div>';
+    return;
+  }
+  msgs.forEach(m => {
+    const minha = Number(m.remetente_id) === Number(euId);
+    const hora  = formatHora(m.enviado_em);
+    const denuncia = (!minha && typeof ffBotaoDenuncia === 'function')
+      ? `<div style="text-align:left;margin-top:2px;">${ffBotaoDenuncia('mensagem', m.id, '⚑')}</div>` : '';
+    if (minha) {
+      const eu = (typeof Auth !== 'undefined' && Auth.usuario()) || {};
+      wrap.innerHTML += `
+        <div class="msg-row enviada">
+          <div class="balao">
+            ${renderConteudoMensagem(m)}
+            <div class="balao-hora">${hora} <span class="check${m.lida ? ' lido' : ''}">lido</span></div>
+          </div>
+          <div class="msg-avatar" style="background:#1e3a8a;">${avatarHtml(eu.foto_url, 'Eu')}</div>
+        </div>`;
+    } else {
+      wrap.innerHTML += `
+        <div class="msg-row recebida">
+          <div class="msg-avatar" style="background:${conversaAtiva.cor};">${avatarHtml(conversaAtiva.fotoUrl, conversaAtiva.avatar)}</div>
+          <div>
+            <div class="balao">
+              ${renderConteudoMensagem(m)}
+              <div class="balao-hora">${hora}</div>
+            </div>
+            ${denuncia}
+          </div>
+        </div>`;
+    }
+  });
+  if (perto) wrap.scrollTop = wrap.scrollHeight;
+}
+
+// Anexos: imagem mostra preview inline, outros tipos viram um balão de download.
+function formatBytes(bytes) {
+  if (!bytes) return '';
+  const unidades = ['B', 'KB', 'MB', 'GB'];
+  let i = 0, v = Number(bytes);
+  while (v >= 1024 && i < unidades.length - 1) { v /= 1024; i++; }
+  return `${v.toFixed(v < 10 && i > 0 ? 1 : 0)} ${unidades[i]}`;
+}
+function renderConteudoMensagem(m) {
+  if (m.tipo === 'arquivo' && m.arquivo_path) {
+    const url   = ffArquivoUrl('/uploads/mensagens/' + m.arquivo_path);
+    const nome  = escapeHtml(m.arquivo_nome || 'arquivo');
+    const tam   = formatBytes(m.arquivo_tamanho);
+    const isImg = /\.(png|jpe?g|gif|webp)$/i.test(m.arquivo_nome || '');
+    if (isImg) {
+      return `<a href="${url}" target="_blank" rel="noopener">
+                <img src="${url}" alt="${nome}" style="max-width:220px;max-height:220px;border-radius:8px;display:block;object-fit:cover;">
+              </a>`;
+    }
+    return `<a href="${url}" download="${nome}" class="msg-anexo"
+              style="display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;min-width:180px;">
+              <span style="font-size:24px;">📎</span>
+              <span>
+                <div style="font-weight:600;font-size:13px;">${nome}</div>
+                <div style="font-size:11px;color:#6b7280;">${tam}</div>
+              </span>
+            </a>`;
+  }
+  return escapeHtml(m.conteudo);
+}
+
+async function enviarMensagem() {
+  if (!conversaAtiva) return;
+  const campo = document.getElementById('campoMensagem');
+  const texto = campo.value.trim();
+  if (!texto) return;
+  campo.value = '';
+  campo.style.height = 'auto';
+  try {
+    await ApiMensagens.enviar(conversaAtiva.id, texto);
+    await carregarMensagens();
+    const w = document.getElementById('mensagensWrap');
+    if (w) w.scrollTop = w.scrollHeight;
+  } catch (err) {
+    alert('Não foi possível enviar a mensagem. Tente novamente.');
+    campo.value = texto;
+    console.error(err);
+  }
+}
+
+const MAX_ANEXO_MB = 200; // precisa bater com o limite configurado no multer do backend
+
+async function enviarAnexo(e) {
+  const file = e.target.files[0];
+  e.target.value = ''; // permite selecionar o mesmo arquivo de novo depois
+  if (!file || !conversaAtiva) return;
+
+  if (file.size > MAX_ANEXO_MB * 1024 * 1024) {
+    alert(`Arquivo muito grande (máx. ${MAX_ANEXO_MB}MB).`);
+    return;
+  }
+
+  const prog = document.getElementById('anexoProgress');
+  if (prog) { prog.style.display = 'block'; prog.textContent = `Enviando ${file.name}... 0%`; }
+
+  try {
+    await ApiMensagens.enviarArquivo(conversaAtiva.id, file, (pct) => {
+      if (prog) prog.textContent = `Enviando ${file.name}... ${pct}%`;
+    });
+    if (prog) prog.style.display = 'none';
+    await carregarMensagens();
+    const w = document.getElementById('mensagensWrap');
+    if (w) w.scrollTop = w.scrollHeight;
+  } catch (err) {
+    if (prog) prog.style.display = 'none';
+    alert(err?.message || 'Não foi possível enviar o arquivo. Tente novamente.');
+    console.error(err);
+  }
+}
+
+const POLL_MS = 8000; // 8s: mantém o chat vivo sem estourar o rate limit
+
+function iniciarPolling() {
+  pararPolling();
+  pollTimer = setInterval(async () => {
+    // Não gasta requisição com a aba em segundo plano.
+    if (document.hidden) return;
+    try {
+      await carregarMensagens();
+    } catch (e) {
+      // Se o servidor recusar (ex.: 429), para de insistir em vez de piorar.
+      console.warn('Polling interrompido:', e?.message);
+      pararPolling();
+    }
+  }, POLL_MS);
+}
+function pararPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+window.addEventListener('beforeunload', () => { window.ffConversaAtivaId = null; });
+// Ao voltar para a aba, atualiza na hora e religa o polling.
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && conversaAtiva) {
+    carregarMensagens().catch(() => {});
+    if (!pollTimer) iniciarPolling();
+  }
+});
+
+// ── Denunciar o outro participante ──────────────────────────
+function denunciarUsuarioAtivo() {
+  if (!conversaAtiva) return;
+  if (typeof ffDenunciar === 'function') ffDenunciar('usuario', conversaAtiva.outroId);
+}
+
+// ── Helpers de input ────────────────────────────────────────
+function teclaEnter(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensagem(); }
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+function inserirTexto(t) {
+  const c = document.getElementById('campoMensagem');
+  c.value += t; c.focus(); autoResize(c);
+}
+function filtrarTab(tab, el) {
+  filtroAtual = tab;
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('ativo'));
+  if (el) el.classList.add('ativo');
+  aplicarFiltro();
+}
+
+// Troca de aba por código (usado após o pagamento)
+function filtrarTabPorNome(tab) {
+  const el = Array.from(document.querySelectorAll('.sidebar-tab'))
+    .find(t => (t.getAttribute('onclick') || '').includes(`'${tab}'`));
+  filtrarTab(tab, el);
+}
+function voltarLista() {
+  // Mobile: volta para a lista de conversas
+  document.getElementById('chatArea')?.classList.remove('aberta');
+  document.getElementById('sidebar')?.classList.add('aberta');
+}
+
+function togglePainel() {
+  painelAberto = !painelAberto;
+  const p = document.getElementById('painelInfo');
+  if (p) p.style.display = painelAberto ? 'flex' : 'none';
+}
+function toggleMenu() {
+  document.querySelector('nav')?.classList.toggle('nav-aberto');
+}
+
+// ── Proposta: fica na página "Quero Trabalhar" ──────────────
+function emBreve() { alert('As propostas são enviadas na página "Quero Trabalhar".'); }
+function abrirModalProposta()   { emBreve(); }
+function enviarProposta()        { emBreve(); }
+function aceitarProposta()       { emBreve(); }
+function recusarProposta()       { emBreve(); }
+function confirmarEncerramento() { emBreve(); }
+function fecharModalProposta()   { document.getElementById('modalProposta')?.classList.remove('ativo'); }
+
+// ── PAGAMENTO + AVALIAÇÃO ───────────────────────────────────
+let metodoPag = 'pix';
+let notaAval  = 0;
+const LABELS_NOTA = ['Clique para avaliar','Péssimo','Ruim','Regular','Bom','Excelente'];
+
+// ── MODELO DE NEGÓCIO ───────────────────────────────────────
+// A taxa de 5% é ACRÉSCIMO cobrado do CONTRATANTE.
+// O freelancer recebe 100% do valor que propôs.
+const TAXA_FREELAFREE  = 0.05;  // 5% — pago pelo contratante
+const TAXA_CONCORRENTE = 0.20;  // ~20% — descontado do freelancer (Workana, 99Freelas, Fiverr...)
+
+const BRL = v => 'R$ ' + Number(v || 0).toLocaleString('pt-BR', {
+  minimumFractionDigits: 2, maximumFractionDigits: 2
+});
+
+function calcularRepasse(valor) {
+  const acordado = Number(valor) || 0;          // valor da proposta
+  const taxa     = Number((acordado * TAXA_FREELAFREE).toFixed(2));
+  const total    = Number((acordado + taxa).toFixed(2)); // contratante desembolsa
+  const liquido  = acordado;                    // freelancer recebe INTEGRAL
+  // Em plataformas que descontam ~20% do freelancer:
+  const concorrente = Number((acordado * (1 - TAXA_CONCORRENTE)).toFixed(2));
+  return { acordado, taxa, total, liquido, concorrente, diferenca: liquido - concorrente };
+}
+
+function atualizarRepasse() {
+  const r = calcularRepasse(document.getElementById('pagValorInput')?.value);
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('repAcordado', BRL(r.acordado));
+  set('repLiquido',  BRL(r.liquido));
+  set('repTaxa',     '+ ' + BRL(r.taxa));
+  set('repTotal',    BRL(r.total));
+  const eco = document.getElementById('repEconomia');
+  if (eco) eco.style.display = r.acordado > 0 ? 'block' : 'none';
+}
+
+function abrirModalPagamento() {
+  if (!conversaAtiva) { alert('Abra uma conversa primeiro.'); return; }
+
+  // O pagamento segue o VALOR DA PROPOSTA ACEITA (o contrato),
+  // não o orçamento anunciado no projeto (que é apenas um teto).
+  const acordado = Number(conversaAtiva.valorAcordado) || 0;
+  if (acordado <= 0) {
+    alert('Não foi encontrada uma proposta aceita com valor válido para esta conversa.');
+    return;
+  }
+
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('pagProjeto', conversaAtiva.projeto);
+  set('pagFreelancer', conversaAtiva.nome);
+  set('pagOrcamento', conversaAtiva.orcamento);
+  set('pagValor', BRL(acordado));
+  set('avalNome', conversaAtiva.nome);
+  const vi = document.getElementById('pagValorInput');
+  if (vi) vi.value = acordado;
+  atualizarRepasse();
+
+  metodoPag = 'pix';
+  notaAval  = 0;
+  document.querySelectorAll('#pagMetodos .pag-metodo').forEach(m =>
+    m.classList.toggle('selected', m.dataset.val === 'pix'));
+  pintarEstrelas(0);
+  set('notaLabel', LABELS_NOTA[0]);
+  const ac = document.getElementById('avalComentario'); if (ac) ac.value = '';
+  const po = document.getElementById('pagObs');        if (po) po.value = '';
+  document.getElementById('pagFormView').style.display = 'block';
+  document.getElementById('pagPixView').style.display = 'none';
+  document.getElementById('pagSucessoView').style.display = 'none';
+  document.getElementById('modalPagamento').classList.add('ativo');
+}
+function fecharModalPagamento() {
+  clearInterval(pixPollId);
+  document.getElementById('modalPagamento')?.classList.remove('ativo');
+}
+// Volta do QR code pro formulário sem fechar o modal.
+function cancelarPix() {
+  clearInterval(pixPollId);
+  document.getElementById('pagPixView').style.display = 'none';
+  document.getElementById('pagFormView').style.display = 'block';
+}
+function selecionarMetodo(el) {
+  metodoPag = el.dataset.val;
+  document.querySelectorAll('#pagMetodos .pag-metodo').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function pintarEstrelas(n) {
+  document.querySelectorAll('#estrelasWrap .estrela').forEach(e => {
+    const v = Number(e.dataset.val) <= n;
+    e.classList.toggle('selecionada', v);
+    e.style.color = v ? '#f59e0b' : '#d1d5db';
+  });
+}
+function hoverEstrela(n) { pintarEstrelas(n); }
+function sairHover()     { pintarEstrelas(notaAval); }
+function selecionarEstrela(n) {
+  notaAval = n;
+  pintarEstrelas(n);
+  const nl = document.getElementById('notaLabel');
+  if (nl) nl.textContent = LABELS_NOTA[n] || '';
+}
+
+let pixPollId = null;
+
+async function confirmarPagamento() {
+  if (!conversaAtiva) return;
+  // Pix tem integração real com o Mercado Pago (QR code) — os outros
+  // métodos seguem o fluxo antigo, direto para "concluir".
+  if (metodoPag === 'pix') return iniciarPagamentoPix();
+  return confirmarPagamentoSimulado();
+}
+
+// ── PIX (Mercado Pago) ──────────────────────────────────────
+async function iniciarPagamentoPix() {
+  const btn = document.querySelector('#pagFormView .btn-confirmar-pag');
+  if (btn) { btn.disabled = true; btn.textContent = 'Gerando Pix...'; }
+  try {
+    const cobranca = await ApiPagamentos.criar(conversaAtiva.id);
+
+    document.getElementById('pagFormView').style.display = 'none';
+    document.getElementById('pagPixView').style.display = 'block';
+    document.getElementById('pixQrImg').src = 'data:image/png;base64,' + cobranca.qrCodeBase64;
+    document.getElementById('pixCopiaCola').value = cobranca.qrCode || '';
+    const st = document.getElementById('pixStatus');
+    if (st) { st.textContent = 'Aguardando pagamento…'; st.style.background = '#fef9c3'; st.style.color = '#854d0e'; }
+
+    pollPixStatus(cobranca.mpPaymentId);
+  } catch (err) {
+    alert(err?.message || 'Não foi possível gerar o Pix.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar pagamento'; }
+  }
+}
+
+function pollPixStatus(mpPaymentId) {
+  clearInterval(pixPollId);
+  pixPollId = setInterval(async () => {
+    try {
+      const d = await ApiPagamentos.status(mpPaymentId);
+      if (d.status === 'aprovado') {
+        clearInterval(pixPollId);
+        const st = document.getElementById('pixStatus');
+        if (st) { st.textContent = '✓ Pagamento aprovado!'; st.style.background = '#dcfce7'; st.style.color = '#16a34a'; }
+        await finalizarAposPagamentoPix();
+      } else if (d.status === 'rejeitado' || d.status === 'cancelado') {
+        clearInterval(pixPollId);
+        const st = document.getElementById('pixStatus');
+        if (st) { st.textContent = 'Pagamento ' + d.status + '. Cancele e tente novamente.'; st.style.background = '#fee2e2'; st.style.color = '#b91c1c'; }
+      }
+    } catch (_) { /* segue tentando */ }
+  }, 4000);
+}
+
+// Quando o Pix é aprovado, o backend já encerra o match e libera o
+// projeto sozinho (webhook/polling do servidor). Aqui só buscamos os
+// valores oficiais atualizados e replicamos a mensagem/avaliação no chat.
+async function finalizarAposPagamentoPix() {
+  const obs    = (document.getElementById('pagObs')?.value || '').trim();
+  const coment = (document.getElementById('avalComentario')?.value || '').trim();
+  try {
+    const resp = await ApiMatches.buscar(conversaAtiva.id);
+    await concluirNaTelaComResposta(resp, 'pix', obs, coment);
+  } catch (err) {
+    console.error(err);
+    alert('Pagamento aprovado, mas houve um erro ao atualizar a tela. Atualize a página.');
+  }
+}
+
+// ── Outros métodos (fluxo antigo, sem integração real) ──────
+const NOMES_METODO = { pix:'Pix', transferencia:'Transferência', boleto:'Boleto', cartao:'Cartão' };
+
+async function confirmarPagamentoSimulado() {
+  const obs    = (document.getElementById('pagObs')?.value || '').trim();
+  const coment = (document.getElementById('avalComentario')?.value || '').trim();
+  const btn    = document.querySelector('#pagFormView .btn-confirmar-pag');
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Processando...'; }
+  try {
+    // O backend recalcula e devolve os valores oficiais.
+    const resp = await ApiMatches.concluir(conversaAtiva.id, metodoPag);
+    await concluirNaTelaComResposta(resp, metodoPag, obs, coment);
+  } catch (err) {
+    alert(err?.message || 'Não foi possível concluir o pagamento. Tente novamente.');
+    console.error(err);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar pagamento'; }
+  }
+}
+
+// Parte final compartilhada por Pix (aprovado pelo Mercado Pago) e pelos
+// métodos simulados (concluir manual): grava mensagem/avaliação no chat
+// e mostra a tela de sucesso. `resp` é o match já atualizado pelo backend
+// (valor_pago, taxa_plataforma, valor_repassado, valor_acordado).
+async function concluirNaTelaComResposta(resp, metodo, obs, coment) {
+  const local    = calcularRepasse(conversaAtiva.valorAcordado);
+  const acordado = Number(resp?.valor_acordado)  || local.acordado;
+  const liquido  = Number(resp?.valor_repassado) || local.liquido;
+  const taxa     = Number(resp?.taxa_plataforma) || local.taxa;
+  const total    = Number(resp?.valor_pago)      || local.total;
+
+  let msgPag =
+    `Pagamento confirmado via ${NOMES_METODO[metodo] || metodo} — projeto encerrado.\n` +
+    `Valor acordado na proposta: ${BRL(acordado)}\n` +
+    `Freelancer recebe (100%): ${BRL(liquido)}\n` +
+    `Taxa FreelaFree (5%, paga pelo contratante): +${BRL(taxa)}\n` +
+    `Total desembolsado: ${BRL(total)}`;
+  if (obs) msgPag += `\nObs: ${obs}`;
+  await ApiMensagens.enviar(conversaAtiva.id, msgPag);
+
+  if (notaAval > 0) {
+    // Persiste a avaliação (reputação real, não só texto no chat).
+    try {
+      await ApiAvaliacoes.criar({
+        match_id:   conversaAtiva.id,
+        nota:       notaAval,
+        comentario: coment || null
+      });
+    } catch (e) {
+      console.error('Falha ao salvar avaliação:', e);
+    }
+    let msgAval = `Avaliação: ${notaAval}/5 (${LABELS_NOTA[notaAval]})`;
+    if (coment) msgAval += ` — "${coment}"`;
+    await ApiMensagens.enviar(conversaAtiva.id, msgAval);
+  }
+
+  document.getElementById('pagFormView').style.display = 'none';
+  document.getElementById('pagPixView').style.display = 'none';
+  document.getElementById('pagSucessoView').style.display = 'block';
+  const sm = document.getElementById('pagSucessoMsg');
+  if (sm) sm.innerHTML =
+    `O freelancer foi notificado e o serviço foi concluído.<br>` +
+    `<strong>${BRL(liquido)}</strong> serão repassados — <strong>100% do valor proposto</strong>.<br>` +
+    `<span style="font-size:12px;color:#64748b;">Taxa FreelaFree (5%): ${BRL(taxa)} · ` +
+    `Total desembolsado: ${BRL(total)}</span>`;
+  if (notaAval > 0) {
+    const sa = document.getElementById('pagSucessoAvaliacao');
+    if (sa) sa.style.display = 'block';
+    const se = document.getElementById('pagSucessoEstrelas');
+    if (se) se.textContent = '★'.repeat(notaAval) + '☆'.repeat(5 - notaAval);
+    const sn = document.getElementById('pagSucessoNota');
+    if (sn) sn.textContent = LABELS_NOTA[notaAval];
+  }
+  await carregarMensagens();
+
+  // Projeto pago = conversa encerrada: sai de "Todas" e vai para "Finalizadas"
+  const idFinalizado = conversaAtiva.id;
+  await carregarConversas();          // recarrega com status = concluido
+  filtrarTabPorNome('finalizadas');   // já mostra a aba certa
+  await abrirConversa(idFinalizado);  // redesenha botões/banner da conversa
+}
+
+// ── AVALIAÇÃO BILATERAL (freelancer avalia contratante e vice-versa) ──
+let notaAv = 0;
+
+function abrirModalAvaliar() {
+  if (!conversaAtiva) return;
+  notaAv = 0;
+  pintarEstrelasAv(0);
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('avNomeAlvo', conversaAtiva.nome);
+  document.getElementById('avNomeAlvo')?.classList.toggle('ff-empresa', !!conversaAtiva.ehEmpresa);
+  set('notaLabelAv', LABELS_NOTA[0]);
+  const c = document.getElementById('avComentario'); if (c) c.value = '';
+  document.getElementById('avFormView').style.display = 'block';
+  document.getElementById('avSucessoView').style.display = 'none';
+  document.getElementById('modalAvaliar').classList.add('ativo');
+}
+function fecharModalAvaliar() {
+  document.getElementById('modalAvaliar')?.classList.remove('ativo');
+}
+function pintarEstrelasAv(n) {
+  document.querySelectorAll('#estrelasWrapAv .estrela').forEach(e => {
+    const v = Number(e.dataset.val) <= n;
+    e.classList.toggle('selecionada', v);
+    e.style.color = v ? '#f59e0b' : '#d1d5db';
+  });
+}
+function selecionarEstrelaAv(n) {
+  notaAv = n;
+  pintarEstrelasAv(n);
+  const nl = document.getElementById('notaLabelAv');
+  if (nl) nl.textContent = LABELS_NOTA[n] || '';
+}
+async function enviarAvaliacao() {
+  if (!conversaAtiva) return;
+  if (notaAv < 1) { alert('Escolha de 1 a 5 estrelas.'); return; }
+  const coment = (document.getElementById('avComentario')?.value || '').trim();
+  const btn = document.querySelector('#avFormView .btn-confirmar-pag');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+  try {
+    await ApiAvaliacoes.criar({
+      match_id:   conversaAtiva.id,
+      nota:       notaAv,
+      comentario: coment || null
+    });
+    let msg = `Avaliação: ${notaAv}/5 (${LABELS_NOTA[notaAv]})`;
+    if (coment) msg += ` — "${coment}"`;
+    await ApiMensagens.enviar(conversaAtiva.id, msg);
+
+    conversaAtiva.jaAvaliei = true;
+    const ba = document.getElementById('btnAvaliar');
+    if (ba) ba.style.display = 'none';
+    document.getElementById('avalBanner')?.classList.remove('ativo');
+
+    document.getElementById('avFormView').style.display = 'none';
+    document.getElementById('avSucessoView').style.display = 'block';
+    await carregarMensagens();
+  } catch (err) {
+    alert(err?.message || 'Não foi possível registrar a avaliação.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Enviar avaliação'; }
+  }
+}
+
+// ── Busca ───────────────────────────────────────────────────
+document.getElementById('buscaConversa')?.addEventListener('input', aplicarFiltro);
+
+// ── Início ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  if (typeof Auth === 'undefined' || !Auth.logado()) {
+    alert('Você precisa estar logado para acessar as mensagens.');
+    window.location.href = 'login.html';
+    return;
+  }
+  const u = Auth.usuario();
+  euId = u ? u.id : null;
+  await carregarConversas();
+
+  // Mobile: começa mostrando a lista de conversas
+  document.getElementById('sidebar')?.classList.add('aberta');
+
+  // Vindo de "aceitar proposta": mensagens.html?match=ID
+  const mp = new URLSearchParams(location.search).get('match');
+  if (mp) {
+    abrirConversa(Number(mp));
+    history.replaceState(null, '', 'mensagens.html');
+  }
+});
+</script>
+
+<script src="transitions.js"></script>
+<!-- MODAL AVALIAÇÃO (independente do pagamento — serve para ambos os lados) -->
+<div class="modal-pagamento" id="modalAvaliar">
+ <div class="modal-pag-box" style="max-width:420px;">
+  <div class="pag-header">
+   <div>
+    <h3>Avaliar</h3>
+    <p class="pag-subtitulo">Sua avaliação fica visível no perfil de <span id="avNomeAlvo">—</span></p>
+   </div>
+   <button class="pag-fechar" onclick="fecharModalAvaliar()"></button>
+  </div>
+
+  <div id="avFormView">
+   <div class="avaliacao-section" style="margin-top:0;">
+    <div class="estrelas-wrap" id="estrelasWrapAv">
+     <span class="estrela" data-val="1" onclick="selecionarEstrelaAv(1)">★</span>
+     <span class="estrela" data-val="2" onclick="selecionarEstrelaAv(2)">★</span>
+     <span class="estrela" data-val="3" onclick="selecionarEstrelaAv(3)">★</span>
+     <span class="estrela" data-val="4" onclick="selecionarEstrelaAv(4)">★</span>
+     <span class="estrela" data-val="5" onclick="selecionarEstrelaAv(5)">★</span>
+    </div>
+    <div class="nota-label" id="notaLabelAv">Clique para avaliar</div>
+    <textarea class="avaliacao-comentario" id="avComentario" rows="3"
+              placeholder="Como foi trabalhar com essa pessoa? (opcional)"></textarea>
+   </div>
+   <div class="mp-btns">
+    <button class="btn-cancelar-mp" onclick="fecharModalAvaliar()">Cancelar</button>
+    <button class="btn-confirmar-pag" onclick="enviarAvaliacao()">Enviar avaliação</button>
+   </div>
+  </div>
+
+  <div class="pag-sucesso" id="avSucessoView" style="display:none;">
+   <h4>Avaliação registrada!</h4>
+   <p>Obrigado por ajudar a manter a comunidade confiável.</p>
+   <button class="btn-confirmar-pag" style="width:100%;margin-top:8px;" onclick="fecharModalAvaliar()">Fechar</button>
+  </div>
+ </div>
+</div>
+
+</body>
+</html>

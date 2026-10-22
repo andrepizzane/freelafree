@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Propostas Recebidas - FreelaFree</title>
+ <meta name="description" content="Veja e gerencie as propostas recebidas nos seus projetos na FreelaFree.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="Propostas recebidas — FreelaFree">
+ <meta property="og:description" content="Veja e gerencie as propostas recebidas nos seus projetos na FreelaFree.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Propostas recebidas — FreelaFree">
+ <meta name="twitter:description" content="Veja e gerencie as propostas recebidas nos seus projetos na FreelaFree.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link{position:absolute;left:-9999px;top:0;background:#2563eb;color:#fff;padding:10px 16px;z-index:1000;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+  .skip-link:focus{left:0;}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #2563eb;outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  fieldset.filtro-grupo{border:none;padding:0;margin:0 0 16px 0;}
+  fieldset.filtro-grupo legend{font-weight:600;padding:0;margin-bottom:6px;}
+  /* Garante que a página role normalmente (evita colunas presas em 100vh) */
+  html,body{height:auto!important;overflow-y:auto!important;}
+  .trabalhos-wrap{height:auto!important;min-height:0!important;overflow:visible!important;}
+  .filtros-lateral,.projetos-area{height:auto!important;max-height:none!important;overflow:visible!important;}
+
+  .pr-header h2{font-size:26px;color:#1e293b;margin:0 0 4px;}
+  .pr-header p{color:#64748b;margin:0 0 20px;font-size:15px;}
+  .aviso{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;}
+
+  .prop-item{border:1px solid #eef0f3;border-radius:10px;padding:14px;margin-bottom:12px;background:#fafbfc;}
+  .prop-projeto{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#2563eb;background:#eff6ff;padding:3px 9px;border-radius:999px;text-decoration:none;margin-bottom:8px;}
+  .prop-projeto:hover{background:#dbeafe;}
+  .prop-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  .prop-freela{font-weight:600;color:#1e293b;}
+  .prop-valor{font-weight:700;color:#2563eb;font-size:16px;}
+  .prop-prazo{font-size:13px;color:#64748b;margin:2px 0 8px;}
+  .prop-msg{font-size:14px;color:#374151;background:#fff;border:1px solid #eef0f3;border-radius:8px;padding:10px;margin:8px 0;}
+  .prop-acoes{display:flex;gap:10px;margin-top:6px;}
+  .btn-aceitar{background:#16a34a;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;}
+  .btn-aceitar:hover{background:#15803d;}
+  .btn-recusar{background:#fff;color:#b91c1c;border:1px solid #fca5a5;padding:9px 18px;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;}
+  .btn-recusar:hover{background:#fef2f2;}
+  .prop-badge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;}
+  .bg-pendente{background:#fef9c3;color:#a16207;}
+  .bg-aceita{background:#dcfce7;color:#15803d;}
+  .bg-recusada{background:#fee2e2;color:#b91c1c;}
+  .vazio{color:#94a3b8;font-size:14px;padding:8px 0;}
+
+  .prop-rep{display:flex;align-items:center;gap:5px;font-size:13px;margin-top:2px;}
+  .prop-rep .estrelas{color:#f59e0b;letter-spacing:1px;font-size:14px;}
+  .prop-rep .nota{font-weight:700;color:#334155;}
+  .prop-rep .qtd{color:#94a3b8;}
+  .prop-rep.novo{color:#94a3b8;font-style:italic;}
+ </style>
+</head>
+<body>
+
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Gerencie as propostas recebidas nos seus projetos.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links-pr">&#9776;</button>
+ <div class="nav-links" id="nav-links-pr">
+  <a href="index.html">Início</a>
+  <a href="index.html#sobre">Sobre</a>
+  <a href="index.html#servicos">Serviços</a>
+  <a href="index.html#beneficios">Benefícios</a>
+  <a href="index.html#footer">Contato</a>
+  <a href="termos.html">Termos de uso</a>
+  <a href="privacidade.html">Privacidade</a>
+  <a href="propostas-recebidas.html">Propostas</a>
+  <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+  <div class="search-bar">
+   <label for="buscaNav" class="sr-only">Buscar no site</label>
+   <input type="text" id="buscaNav" placeholder="Buscar...">
+   <button class="search-btn" aria-label="Buscar"></button>
+  </div>
+  <div id="userArea"></div>
+ </div>
+</nav>
+
+<div class="trabalhos-wrap" id="conteudo-principal">
+
+ <aside class="filtros-lateral">
+  <h2 style="font-size:18px;">Filtros</h2>
+
+  <fieldset class="filtro-grupo">
+   <legend class="filtro-titulo">Status</legend>
+   <div class="filtro-opcoes">
+    <label><input type="radio" name="fstatus" value="todas" checked onchange="renderPropostas()"> Todas</label>
+    <label><input type="radio" name="fstatus" value="pendente" onchange="renderPropostas()"> Pendentes</label>
+    <label><input type="radio" name="fstatus" value="aceita" onchange="renderPropostas()"> Aceitas</label>
+    <label><input type="radio" name="fstatus" value="recusada" onchange="renderPropostas()"> Recusadas</label>
+   </div>
+  </fieldset>
+
+  <fieldset class="filtro-grupo">
+   <legend class="filtro-titulo">Valor da proposta</legend>
+   <div class="filtro-opcoes">
+    <label><input type="radio" name="fvalor" value="todos" checked onchange="renderPropostas()"> Qualquer valor</label>
+    <label><input type="radio" name="fvalor" value="200"  onchange="renderPropostas()"> Até R$ 200</label>
+    <label><input type="radio" name="fvalor" value="500"  onchange="renderPropostas()"> Até R$ 500</label>
+    <label><input type="radio" name="fvalor" value="1500" onchange="renderPropostas()"> Até R$ 1.500</label>
+    <label><input type="radio" name="fvalor" value="9999" onchange="renderPropostas()"> Acima de R$ 1.500</label>
+   </div>
+  </fieldset>
+
+  <button class="btn-limpar" onclick="limparFiltros()">Limpar filtros</button>
+ </aside>
+
+ <div class="projetos-area">
+  <div class="pr-header">
+   <h2>Propostas Recebidas</h2>
+   <p>Veja as propostas dos freelancers nos seus projetos. Ao aceitar, a conversa abre nas Mensagens.</p>
+  </div>
+
+  <div class="aviso" id="aviso" style="display:none;"></div>
+
+  <div class="projetos-topo">
+   <span id="resultado-count" aria-live="polite">Carregando...</span>
+   <label for="ordenar" class="sr-only">Ordenar propostas</label>
+   <select id="ordenar" onchange="renderPropostas()">
+    <option value="recentes">Mais recentes</option>
+    <option value="maior_valor">Maior valor</option>
+    <option value="menor_valor">Menor valor</option>
+    <option value="melhor_avaliado">Melhor avaliação</option>
+   </select>
+  </div>
+
+  <div id="lista" aria-live="polite">
+   <div class="vazio">Carregando suas propostas...</div>
+  </div>
+
+  <div class="sem-resultados" id="semResultados" style="display:none;">
+   <h3>Nenhuma proposta encontrada</h3>
+   <p>Tente ajustar os filtros.</p>
+   <button class="btn-limpar" onclick="limparFiltros()">Limpar filtros</button>
+  </div>
+ </div>
+</div>
+
+<footer id="footer">
+ <div class="footer-contato">
+  <p>Freelafree3@gmail.com</p>
+  <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+   <img src="instagram.svg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+  </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script>
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const expandido = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!expandido));
+});
+
+function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function real(v){ return 'R$ ' + Number(v||0).toLocaleString('pt-BR', {minimumFractionDigits:2}); }
+
+let meusProjetos = [];
+let todasPropostas = []; // propostas de todos os projetos, achatadas, cada uma com ._projeto anexado
+const _repCache = new Map();
+
+async function carregar() {
+ const lista = document.getElementById('lista');
+ try {
+  meusProjetos = await ApiProjetos.meus();
+ } catch (err) {
+  lista.innerHTML = '<div class="vazio">Não foi possível carregar. Faça login como contratante.</div>';
+  document.getElementById('resultado-count').textContent = '';
+  return;
+ }
+ if (!meusProjetos.length) {
+  lista.innerHTML = '<div class="vazio">Você ainda não publicou projetos. Publique um projeto para receber propostas.</div>';
+  document.getElementById('resultado-count').textContent = '0 propostas';
+  return;
+ }
+
+ todasPropostas = [];
+ for (const proj of meusProjetos) {
+  try {
+   const props = await ApiPropostas.doProjeto(proj.id);
+   props.forEach(p => { p._projeto = proj; });
+   todasPropostas.push(...props);
+  } catch (_) { /* segue pros outros projetos mesmo se um falhar */ }
+ }
+
+ // pré-carrega reputação de todos os freelancers pra poder ordenar por "melhor avaliação"
+ await Promise.all(todasPropostas.map(p => reputacaoDe(p.freelancer_id)));
+
+ renderPropostas();
+}
+
+function renderPropostas() {
+ const lista = document.getElementById('lista');
+ const contador = document.getElementById('resultado-count');
+ const semResultados = document.getElementById('semResultados');
+
+ const fstatus  = document.querySelector('input[name=fstatus]:checked')?.value  || 'todas';
+ const fvalor   = document.querySelector('input[name=fvalor]:checked')?.value   || 'todos';
+ const ordem    = document.getElementById('ordenar').value;
+
+ let filtradas = todasPropostas.filter(p => {
+  if (fstatus !== 'todas' && p.status !== fstatus) return false;
+  if (fvalor !== 'todos' && Number(p.valor || 0) > Number(fvalor)) return false;
+  return true;
+ });
+
+ if (ordem === 'maior_valor') {
+  filtradas.sort((a, b) => Number(b.valor || 0) - Number(a.valor || 0));
+ } else if (ordem === 'menor_valor') {
+  filtradas.sort((a, b) => Number(a.valor || 0) - Number(b.valor || 0));
+ } else if (ordem === 'melhor_avaliado') {
+  filtradas.sort((a, b) => {
+   const ra = _repCache.get(a.freelancer_id)?.media || 0;
+   const rb = _repCache.get(b.freelancer_id)?.media || 0;
+   return rb - ra;
+  });
+ } else {
+  filtradas.sort((a, b) => {
+   if (a.criado_em && b.criado_em) return new Date(b.criado_em) - new Date(a.criado_em);
+   return (b.id || 0) - (a.id || 0);
+  });
+ }
+
+ contador.textContent = `${filtradas.length} ${filtradas.length === 1 ? 'proposta' : 'propostas'}`;
+
+ if (!filtradas.length) {
+  lista.innerHTML = '';
+  semResultados.style.display = 'block';
+  return;
+ }
+ semResultados.style.display = 'none';
+
+ lista.innerHTML = '';
+ filtradas.forEach(pr => {
+  const item = document.createElement('div');
+  item.className = 'prop-item';
+  const acoes = pr.status === 'pendente'
+   ? `<div class="prop-acoes">
+        <button class="btn-aceitar" onclick="aceitar(${pr.id}, ${pr._projeto.id})">Aceitar</button>
+        <button class="btn-recusar" onclick="recusar(${pr.id}, ${pr._projeto.id})">Recusar</button>
+      </div>`
+   : `<span class="prop-badge bg-${pr.status}">${pr.status}</span>`;
+  item.innerHTML = `
+   <a class="prop-projeto" href="#" onclick="return false;">${escapeHtml(pr._projeto.titulo)}</a>
+   <div class="prop-topo">
+    <div>
+     <a class="prop-freela" href="perfil.html?id=${pr.freelancer_id}" style="color:#1e293b;text-decoration:none;">
+      ${escapeHtml(pr.freelancer_nome || 'Freelancer')} <span style="color:#2563eb;font-size:12px;font-weight:600;">ver perfil ›</span>
+     </a>
+     <div class="prop-rep" id="rep-${pr.id}">Carregando reputação...</div>
+    </div>
+    <span class="prop-valor">${real(pr.valor)}</span>
+   </div>
+   <div class="prop-prazo">Prazo proposto: ${escapeHtml(pr.prazo_proposto || '—')}</div>
+   <div class="prop-msg">${escapeHtml(pr.mensagem || '')}</div>
+   ${acoes}`;
+  lista.appendChild(item);
+  pintarReputacao(pr.id, pr.freelancer_id);
+ });
+}
+
+function limparFiltros() {
+ document.querySelector('input[name=fstatus][value=todas]').checked = true;
+ document.querySelector('input[name=fvalor][value=todos]').checked = true;
+ document.getElementById('ordenar').value = 'recentes';
+ renderPropostas();
+}
+
+// ── Reputação do freelancer (com cache, para não estourar o rate limit) ──
+async function reputacaoDe(usuarioId) {
+  if (!usuarioId) return null;
+  if (_repCache.has(usuarioId)) return _repCache.get(usuarioId);
+  try {
+    const r = await ApiAvaliacoes.doUsuario(usuarioId);
+    _repCache.set(usuarioId, r);
+    return r;
+  } catch (_) { return null; }
+}
+
+async function pintarReputacao(propostaId, freelancerId) {
+  const el = document.getElementById('rep-' + propostaId);
+  if (!el) return;
+  const r = await reputacaoDe(freelancerId);
+  if (!r || !r.media || !r.total) {
+    el.className = 'prop-rep novo';
+    el.textContent = 'Sem avaliações ainda';
+    return;
+  }
+  const cheias = Math.round(r.media);
+  el.className = 'prop-rep';
+  el.innerHTML =
+    `<span class="estrelas">${'★'.repeat(cheias)}${'☆'.repeat(5 - cheias)}</span>` +
+    `<span class="nota">${r.media.toFixed(1)}</span>` +
+    `<span class="qtd">(${r.total} ${r.total === 1 ? 'avaliação' : 'avaliações'})</span>`;
+}
+
+function mostrarAviso(txt) {
+ const a = document.getElementById('aviso');
+ a.textContent = txt;
+ a.style.display = 'block';
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function aceitar(propostaId, projetoId) {
+ try {
+  const resp = await ApiPropostas.aceitar(propostaId);
+  if (resp && resp.match_id) {
+   window.location.href = 'mensagens.html?match=' + resp.match_id;
+  } else {
+   window.location.href = 'mensagens.html';
+  }
+ } catch (err) {
+  alert(err.message || 'Erro ao aceitar proposta.');
+ }
+}
+
+async function recusar(propostaId, projetoId) {
+ if (!await ffConfirm('Recusar esta proposta? Esta ação não pode ser desfeita.', 'Recusar proposta')) return;
+ try {
+  await ApiPropostas.recusar(propostaId);
+  const p = todasPropostas.find(x => x.id === propostaId);
+  if (p) p.status = 'recusada';
+  renderPropostas();
+ } catch (err) {
+  alert(err.message || 'Erro ao recusar proposta.');
+ }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+ if (typeof Auth === 'undefined' || !Auth.logado()) {
+  alert('Você precisa estar logado para ver suas propostas.');
+  window.location.href = 'login.html';
+  return;
+ }
+ carregar();
+});
+</script>
+<script src="transitions.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+; Zone file for freelafree.online
+; Generated on 2026-05-15 03:29:07 UTC
+
+$ORIGIN freelafree.online
+$TTL 3600
+
+@                              3600 IN SOA   pixel.dns-parking.com. dns.hostinger.com. 2026051503 10000 2400 604800 600
+@                              50 IN A     2.57.91.91
+@                              86400 IN NS    byte.dns-parking.com.
+                               86400 IN NS    pixel.dns-parking.com.
+www                            300 IN CNAME freelafree.online.

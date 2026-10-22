@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Match - FreelaFree</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Conectando freelancers e contratantes de forma simples e justa.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
+ <div class="nav-links">
+ <a href="index.html">Início</a>
+ <a href="index.html#sobre">Sobre</a>
+ <a href="index.html#servicos">Serviços</a>
+ <a href="index.html#beneficios">Benefícios</a>
+ <a href="index.html#footer">Contato</a>
+ <a href="termos.html">Termos de uso</a>
+ <a href="index.html#como-funciona">Como Funciona</a>
+ </div>
+ <div class="nav-right">
+ <div class="search-bar">
+ 
+ <input type="text" placeholder="Buscar...">
+ <button class="search-btn"></button>
+ </div>
+ <div id="userArea">
+ <a href="login.html" class="btn-login">Login</a>
+ <a href="cadastro.html" class="btn-cadastro">Cadastrar</a>
+ </div>
+ </div>
+</nav>
+
+<div class="match-page">
+
+ <div class="match-header">
+ <h2> Sistema de Match</h2>
+ <p>Deslize para aceitar ou recusar projetos e freelancers. Quando os dois lados aceitam — é um Match!</p>
+ </div>
+
+ <!-- MODO: Empresa ou Freelancer -->
+ <div style="display:flex;justify-content:center;margin-bottom:16px;">
+ <div class="mode-toggle">
+ <button class="mode-btn active" id="modeFreelancer" onclick="setModo('freelancer')">Sou Freelancer</button>
+ <button class="mode-btn" id="modeEmpresa" onclick="setModo('empresa')">Sou Empresa</button>
+ </div>
+ </div>
+
+ <!-- CONTADORES -->
+ <div style="display:flex;justify-content:center;">
+ <div class="counter-wrap">
+ <div class="counter-pill">Aceitos: <span id="countAceito">0</span></div>
+ <div class="counter-pill"> Recusados: <span id="countRecusa">0</span></div>
+ <div class="counter-pill"> Matches: <span id="countMatch">0</span></div>
+ </div>
+ </div>
+
+ <!-- ARENA DE CARDS -->
+ <div class="card-arena">
+
+ <div class="stack-wrap" id="stackWrap">
+ <!-- Cards injetados via JS -->
+ </div>
+
+ <!-- BOTÕES DE AÇÃO -->
+ <div class="action-btns" id="actionBtns">
+ <button class="btn-info" title="Ver mais detalhes" onclick="verDetalhes()">ℹ</button>
+ <button class="btn-recusar" id="btnRecusar" title="Recusar" onclick="swipe('left')">X</button>
+ <button class="btn-aceitar" id="btnAceitar" title="Aceitar" onclick="swipe('right')"></button>
+ </div>
+
+ <!-- DICA -->
+ <p style="color:#9ca3af;font-size:13px;text-align:center;margin:0;">Arraste o card ou use os botões para responder</p>
+
+ </div>
+
+ <!-- MATCHES REALIZADOS -->
+ <div style="display:flex;justify-content:center;margin-top:48px;">
+ <div class="matches-panel">
+ <h3> Seus Matches</h3>
+ <div class="matches-list" id="matchesList">
+ <div class="empty-state" id="emptyMatches">
+ <div class="icon"></div>
+ <h4>Nenhum match ainda</h4>
+ <p>Quando você e o outro lado aceitarem mutuamente, o match aparece aqui!</p>
+ </div>
+ </div>
+ </div>
+ </div>
+
+</div>
+
+<!-- OVERLAY DE MATCH -->
+<div class="match-overlay" id="matchOverlay">
+ <div class="match-popup">
+ <div class="hearts"></div>
+ <div class="match-avatars">
+ <div class="av">C</div>
+ <div class="av" id="matchCardAv">CM</div>
+ </div>
+ <h3>É um Match!</h3>
+ <p class="match-desc" id="matchDesc">Vocês dois se aceitaram.<br>Agora é hora de conversar!</p>
+ <button class="btn-chat" onclick="fecharMatch(true)">Enviar Mensagem</button>
+ <button class="btn-continuar" onclick="fecharMatch(false)">Continuar buscando</button>
+ </div>
+</div>
+
+<footer id="footer">
+ <div class="footer-contato">
+ <p>Freelafree3@gmail.com</p>
+ <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+ <img src="https://i.pinimg.com/736x/ae/c9/51/aec951a3c95437a040ef1e8c26af15d8.jpg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+ </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script>
+// RENDERIZAR ESTRELAS
+function renderEstrelas(nota) {
+ const n = parseFloat(nota);
+ if (isNaN(n)) return nota;
+ const cheia = Math.floor(n);
+ const meia = n - cheia >= 0.5 ? 1 : 0;
+ const vazia = 5 - cheia - meia;
+ return '<span style="color:#f59e0b;font-size:15px;letter-spacing:1px;">' +
+ '★'.repeat(cheia) +
+ (meia ? '½' : '') +
+ '</span><span style="color:#d1d5db;font-size:15px;">' +
+ '★'.repeat(vazia) +
+ '</span> <span style="font-size:12px;color:#6b7280;font-weight:600;">' + nota + '</span>';
+}
+
+// DADOS 
+
+const dadosFreelancer = [
+ {
+ id: 1, emoji: 'CM', nome: 'Carlos Mendes', sub: 'Dev Full-Stack · São Paulo, SP',
+ desc: 'Especialista em React e Node.js com 5 anos de experiência. Já desenvolvi sistemas para startups e e-commerces.',
+ tags: ['React', 'Node.js', 'PostgreSQL', 'AWS'],
+ meta: { avaliacao: '4.9 ', projetos: '38', valor: 'R$120/h' },
+ match: 92, banner: 'linear-gradient(135deg,#1e3a8a,#2563eb)'
+ },
+ {
+ id: 2, emoji: 'AL', nome: 'Ana Lima', sub: 'Designer UI/UX · Belo Horizonte, MG',
+ desc: 'Criadora de interfaces intuitivas e identidades visuais marcantes. Trabalho com Figma, Illustrator e After Effects.',
+ tags: ['Figma', 'Branding', 'Motion', 'Prototipação'],
+ meta: { avaliacao: '5.0 ', projetos: '52', valor: 'R$90/h' },
+ match: 87, banner: 'linear-gradient(135deg,#7c3aed,#a855f7)'
+ },
+ {
+ id: 3, emoji: 'MC', nome: 'Mariana Costa', sub: 'Redatora & Copywriter · Remoto',
+ desc: 'Texto que converte. Especialista em conteúdo SEO, landing pages e e-mail marketing para o mercado brasileiro.',
+ tags: ['SEO', 'Copywriting', 'Blog', 'Email Mkt'],
+ meta: { avaliacao: '4.8 ', projetos: '74', valor: 'R$60/h' },
+ match: 78, banner: 'linear-gradient(135deg,#0f766e,#14b8a6)'
+ },
+ {
+ id: 4, emoji: 'RT', nome: 'Rafael Torres', sub: 'Dev Mobile · Curitiba, PR',
+ desc: 'Apps nativos para iOS e Android com React Native. Publicação na App Store e Google Play inclusa no orçamento.',
+ tags: ['React Native', 'iOS', 'Android', 'Firebase'],
+ meta: { avaliacao: '4.7 ', projetos: '21', valor: 'R$150/h' },
+ match: 95, banner: 'linear-gradient(135deg,#b45309,#f59e0b)'
+ },
+ {
+ id: 5, emoji: 'JR', nome: 'Juliana Reis', sub: 'Especialista em Marketing · Remoto',
+ desc: 'Gestão de tráfego pago, Meta Ads e Google Ads. Já gerenciei verbas de R$500k+/mês com ROAS médio de 4x.',
+ tags: ['Meta Ads', 'Google Ads', 'Analytics', 'CRO'],
+ meta: { avaliacao: '4.9 ', projetos: '33', valor: 'R$100/h' },
+ match: 83, banner: 'linear-gradient(135deg,#be123c,#f43f5e)'
+ }
+];
+
+const dadosEmpresa = [
+ {
+ id: 101, emoji: 'TN', nome: 'TechNova Ltda.', sub: 'Startup de Fintech · São Paulo, SP',
+ desc: 'Precisamos de um desenvolvedor para construir nossa API de pagamentos integrada ao Pix. Projeto de 3 meses.',
+ tags: ['Back-end', 'Pix API', 'Python', 'Segurança'],
+ meta: { prazo: '3 meses', orcamento: 'R$25.000', urgencia: ' Alta' },
+ match: 91, banner: 'linear-gradient(135deg,#1e3a8a,#2563eb)'
+ },
+ {
+ id: 102, emoji: 'MC', nome: 'Moda Criativa ME', sub: 'E-commerce de Moda · Rio de Janeiro, RJ',
+ desc: 'Buscamos um designer para criar nossa identidade visual completa: logo, paleta, tipografia e manual de marca.',
+ tags: ['Branding', 'Logo', 'Manual de Marca', 'Moda'],
+ meta: { prazo: '45 dias', orcamento: 'R$8.000', urgencia: 'Média' },
+ match: 85, banner: 'linear-gradient(135deg,#9d174d,#ec4899)'
+ },
+ {
+ id: 103, emoji: 'ES', nome: 'EduStart Edu. Tech.', sub: 'EdTech · Remoto',
+ desc: 'Redatores para produção de conteúdo para nossa plataforma de cursos online. Temas: tecnologia e negócios.',
+ tags: ['Conteúdo', 'EAD', 'Tecnologia', 'Negócios'],
+ meta: { prazo: 'Contínuo', orcamento: 'R$4.500/mês', urgencia: ' Baixa' },
+ match: 77, banner: 'linear-gradient(135deg,#065f46,#10b981)'
+ },
+ {
+ id: 104, emoji: 'CE', nome: 'Construmax Eng.', sub: 'Engenharia Civil · Goiânia, GO',
+ desc: 'Precisamos de um consultor financeiro para reestruturar nosso fluxo de caixa e projeções dos próximos 2 anos.',
+ tags: ['Consultoria', 'Fluxo de Caixa', 'Excel', 'Projeções'],
+ meta: { prazo: '2 meses', orcamento: 'R$12.000', urgencia: 'Média' },
+ match: 88, banner: 'linear-gradient(135deg,#713f12,#d97706)'
+ },
+ {
+ id: 105, emoji: 'LD', nome: 'Lançamentos Digitais', sub: 'Marketing Digital · Remoto',
+ desc: 'Precisamos de um gestor de tráfego para lançamento de infoproduto em julho. Budget de R$200k em ads.',
+ tags: ['Meta Ads', 'Lançamento', 'Info-produto', 'Alto Budget'],
+ meta: { prazo: '60 dias', orcamento: 'R$18.000', urgencia: ' Urgente' },
+ match: 94, banner: 'linear-gradient(135deg,#881337,#f43f5e)'
+ }
+];
+
+// ESTADO 
+
+let modo = 'freelancer';
+let deck = [];
+let indice = 0;
+let countAceito = 0, countRecusa = 0, countMatch = 0;
+let matches = [];
+
+// Simula que 50% das fichas já"aceitaram de volta" (match bilateral)
+const jaAceitouDeVolta = new Set([1, 4, 101, 103, 105]);
+
+// INICIALIZAÇÃO 
+
+function setModo(m) {
+ modo = m;
+ document.getElementById('modeFreelancer').classList.toggle('active', m === 'freelancer');
+ document.getElementById('modeEmpresa').classList.toggle('active', m === 'empresa');
+ deck = m === 'freelancer' ? [...dadosFreelancer] : [...dadosEmpresa];
+ indice = 0;
+ countAceito = 0; countRecusa = 0;
+ atualizarContadores();
+ renderizarStack();
+}
+
+function renderizarStack() {
+ const wrap = document.getElementById('stackWrap');
+ wrap.innerHTML = '';
+
+ if (indice >= deck.length) {
+ wrap.innerHTML = `<div class="empty-state" style="padding-top:80px;">
+ <div class="icon"></div>
+ <h4>Você viu tudo por aqui!</h4>
+ <p>Veja seus matches abaixo ou mude o modo de busca.</p>
+ </div>`;
+ document.getElementById('actionBtns').style.opacity = '0.3';
+ document.getElementById('actionBtns').style.pointerEvents = 'none';
+ return;
+ }
+
+ document.getElementById('actionBtns').style.opacity = '1';
+ document.getElementById('actionBtns').style.pointerEvents = 'auto';
+
+ // Renderiza até 3 cards (top + 2 atrás)
+ for (let i = Math.min(indice + 2, deck.length - 1); i >= indice; i--) {
+ const item = deck[i];
+ const el = criarCard(item);
+ const diff = i - indice;
+ if (diff === 0) el.classList.add('card-top');
+ else if (diff === 1) el.classList.add('card-back-1');
+ else el.classList.add('card-back-2');
+ wrap.appendChild(el);
+ }
+
+ // Ativa arraste no card do topo
+ ativarArraste(document.querySelector('.card-top'));
+}
+
+function criarCard(item) {
+ const el = document.createElement('div');
+ el.className = 'match-card';
+ el.dataset.id = item.id;
+
+ const metaHtml = Object.entries(item.meta).map(([k, v]) => {
+ const valHtml = k === 'avaliacao' ? renderEstrelas(v.replace(/[^\d.]/g,'')) : v;
+ return `<div class="meta-item">
+ <div class="meta-label">${k}</div>
+ <div class="meta-val">${valHtml}</div>
+ </div>`;
+ }).join('');
+
+ el.innerHTML = `
+ <div class="stamp aceitar" id="stampAceitar-${item.id}">ACEITAR</div>
+ <div class="stamp recusar" id="stampRecusar-${item.id}">RECUSAR</div>
+ <div class="card-banner" style="background:${item.banner}">
+ <span class="category-badge">${item.tags[0]}</span>
+ <div class="card-avatar">${item.emoji}</div>
+ </div>
+ <div class="card-body">
+ <div class="card-title">${item.nome}</div>
+ <div class="card-sub">${item.sub}</div>
+ <div class="match-score">
+ <span class="match-score-label">Compatibilidade</span>
+ <div class="match-bar"><div class="match-fill" style="width:${item.match}%"></div></div>
+ <span class="match-pct">${item.match}%</span>
+ </div>
+ <div class="card-desc">${item.desc}</div>
+ <div class="card-tags">${item.tags.map(t => `<span class="ctag">${t}</span>`).join('')}</div>
+ <div class="card-meta">${metaHtml}</div>
+ </div>`;
+
+ return el;
+}
+
+// ARRASTE 
+
+function ativarArraste(card) {
+ if (!card) return;
+ let startX = 0, startY = 0, currX = 0, dragging = false;
+
+ const onStart = (e) => {
+ dragging = true;
+ const pt = e.touches ? e.touches[0] : e;
+ startX = pt.clientX;
+ startY = pt.clientY;
+ card.classList.add('dragging');
+ card.style.transition = 'none';
+ };
+
+ const onMove = (e) => {
+ if (!dragging) return;
+ const pt = e.touches ? e.touches[0] : e;
+ currX = pt.clientX - startX;
+ const rot = currX * 0.08;
+ card.style.transform = `translateX(${currX}px) rotate(${rot}deg)`;
+
+ const stampA = card.querySelector('.stamp.aceitar');
+ const stampR = card.querySelector('.stamp.recusar');
+ if (currX > 40) { stampA.style.opacity = Math.min((currX - 40) / 60, 1); stampR.style.opacity = 0; }
+ else if (currX < -40) { stampR.style.opacity = Math.min((-currX - 40) / 60, 1); stampA.style.opacity = 0; }
+ else { stampA.style.opacity = 0; stampR.style.opacity = 0; }
+ };
+
+ const onEnd = () => {
+ if (!dragging) return;
+ dragging = false;
+ card.classList.remove('dragging');
+ card.style.transition = '';
+ if (currX > 100) { executarSwipe('right'); }
+ else if (currX < -100) { executarSwipe('left'); }
+ else {
+ card.style.transform = '';
+ card.querySelector('.stamp.aceitar').style.opacity = 0;
+ card.querySelector('.stamp.recusar').style.opacity = 0;
+ }
+ currX = 0;
+ };
+
+ card.addEventListener('mousedown', onStart);
+ card.addEventListener('touchstart', onStart, { passive: true });
+ document.addEventListener('mousemove', onMove);
+ document.addEventListener('touchmove', onMove, { passive: true });
+ document.addEventListener('mouseup', onEnd);
+ document.addEventListener('touchend', onEnd);
+}
+
+// SWIPE 
+
+function swipe(dir) {
+ const card = document.querySelector('.card-top');
+ if (!card) return;
+ executarSwipe(dir, card);
+}
+
+function executarSwipe(dir, card) {
+ card = card || document.querySelector('.card-top');
+ if (!card) return;
+
+ const item = deck[indice];
+
+ if (dir === 'right') {
+ card.classList.add('flying-right');
+ countAceito++;
+ setTimeout(() => {
+ // Verifica match bilateral
+ if (jaAceitouDeVolta.has(item.id)) {
+ countMatch++;
+ matches.push(item);
+ atualizarMatchesList();
+ setTimeout(() => mostrarMatch(item), 200);
+ }
+ }, 350);
+ } else {
+ card.classList.add('flying-left');
+ countRecusa++;
+ }
+
+ atualizarContadores();
+
+ setTimeout(() => {
+ indice++;
+ renderizarStack();
+ }, 460);
+}
+
+// MATCH OVERLAY 
+
+function mostrarMatch(item) {
+ document.getElementById('matchCardAv').textContent = item.emoji;
+ document.getElementById('matchDesc').innerHTML =
+ `<strong>${item.nome}</strong> também aceitou você!<br>Agora é hora de conversar.`;
+ document.getElementById('matchOverlay').classList.add('show');
+}
+
+function fecharMatch(irChat) {
+ document.getElementById('matchOverlay').classList.remove('show');
+ if (irChat) window.location.href = 'mensagens.html';
+}
+
+// MATCHES LIST 
+
+function atualizarMatchesList() {
+ const lista = document.getElementById('matchesList');
+ const empty = document.getElementById('emptyMatches');
+ if (matches.length === 0) { empty.style.display = 'block'; return; }
+ empty.style.display = 'none';
+ lista.innerHTML = matches.map(m => `
+ <div class="match-row">
+ <div class="av-sm" style="background:${m.banner};font-size:20px;">${m.emoji}</div>
+ <div class="info">
+ <strong>${m.nome}</strong>
+ <span>${m.sub}</span>
+ </div>
+ <span class="badge-match">${m.match}% compatível</span>
+ <button class="btn-contato" onclick="window.location.href='mensagens.html'">Contatar</button>
+ </div>`).join('');
+}
+
+// DETALHES 
+
+function verDetalhes() {
+ const item = deck[indice];
+ if (!item) return;
+ alert(`${item.nome}\n\n${item.desc}\n\nHabilidades: ${item.tags.join(', ')}\nCompatibilidade: ${item.match}%`);
+}
+
+// UTILITÁRIOS 
+
+function atualizarContadores() {
+ document.getElementById('countAceito').textContent = countAceito;
+ document.getElementById('countRecusa').textContent = countRecusa;
+ document.getElementById('countMatch').textContent = countMatch;
+}
+
+// INIT 
+
+setModo('freelancer');
+</script>
+
+<script src="transitions.js"></script>
+</body>
+</html>

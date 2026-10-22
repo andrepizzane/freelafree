@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Login - FreelaFree</title>
+ <meta name="description" content="Acesse sua conta na FreelaFree e continue seus projetos como freelancer ou contratante.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="Entrar — FreelaFree">
+ <meta property="og:description" content="Acesse sua conta na FreelaFree e continue seus projetos como freelancer ou contratante.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Entrar — FreelaFree">
+ <meta name="twitter:description" content="Acesse sua conta na FreelaFree e continue seus projetos como freelancer ou contratante.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link{position:absolute;left:-9999px;top:0;background:#2563eb;color:#fff;padding:10px 16px;z-index:1000;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+  .skip-link:focus{left:0;}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid #2563eb;outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+ </style>
+</head>
+<body>
+
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Conectando freelancers e contratantes de forma simples e justa.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links-login">&#9776;</button>
+ <div class="nav-links" id="nav-links-login">
+ <a href="index.html">Início</a>
+ <a href="index.html#sobre">Sobre</a>
+ <a href="index.html#servicos">Serviços</a>
+ <a href="index.html#beneficios">Benefícios</a>
+ <a href="index.html#footer">Contato</a>
+ <a href="termos.html">Termos de uso</a>
+ <a href="privacidade.html">Privacidade</a>
+ <a href="index.html#como-funciona">Como Funciona</a>
+ <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+ <div class="search-bar">
+ <label for="busca-login" class="sr-only">Buscar no site</label>
+ <input type="text" id="busca-login" placeholder="Buscar...">
+ <button class="search-btn" aria-label="Buscar"></button>
+ </div>
+ <div id="userArea">
+ <a href="login.html" class="btn-login">Login</a>
+ <a href="cadastro.html" class="btn-cadastro">Cadastrar</a>
+ </div>
+ </div>
+</nav>
+
+<div class="login-wrap" id="conteudo-principal">
+
+ <div id="formBox">
+ <h2>Entrar na sua conta</h2>
+ <div class="login-card">
+
+  <div class="alerta-erro" id="alerta-erro" role="alert" aria-live="assertive"></div>
+
+  <div class="campo">
+   <label for="documento">CPF ou CNPJ <span style="color:#2563eb;font-weight:700;">*</span></label>
+   <input type="text" id="documento" placeholder="000.000.000-00 ou 00.000.000/0001-00" maxlength="18" required aria-required="true" aria-describedby="msg-documento">
+   <span class="msg" id="msg-documento" aria-live="polite"></span>
+  </div>
+
+  <div class="campo">
+   <label for="senha">
+    Senha <span style="color:#2563eb;font-weight:700;">*</span>
+    <a href="recuperar.html">Esqueci minha senha</a>
+   </label>
+   <div class="senha-wrap">
+    <input type="password" id="senha" placeholder="Sua senha" required aria-required="true" aria-describedby="msg-senha">
+    <button class="btn-olho" type="button" onclick="verSenha()" aria-label="Mostrar senha" aria-pressed="false">&#128065;</button>
+   </div>
+   <span class="msg" id="msg-senha" aria-live="polite"></span>
+  </div>
+
+  <hr class="sep">
+
+  <div class="campo-check">
+   <input type="checkbox" id="lembrar">
+   <label for="lembrar">Lembrar minha conta</label>
+  </div>
+
+  <button class="btn-entrar" id="btnEntrar" onclick="fazerLogin()">Entrar</button>
+
+  <div class="link-cadastro">
+   Não tem conta? <a href="cadastro.html">Cadastre-se gratuitamente</a>
+  </div>
+
+ </div>
+ </div>
+
+ <div class="sucesso-box" id="sucessoBox">
+ <div class="sucesso-card">
+  <div class="sucesso-icone">✔</div>
+  <h3>Login realizado!</h3>
+  <p id="sucesso-msg">Bem-vindo(a) de volta à FreelaFree.</p>
+  <a href="index.html" class="btn-primary">Ir para a página inicial</a>
+ </div>
+ </div>
+
+</div>
+
+<footer id="footer">
+ <div class="footer-contato">
+ <p>Freelafree3@gmail.com</p>
+ <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+  <img src="instagram.svg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+ </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<!-- Carrega a camada de API antes do script local -->
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script>
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const expandido = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!expandido));
+});
+// MÁSCARA CPF/CNPJ
+document.getElementById('documento').addEventListener('input', function () {
+ let v = this.value.replace(/\D/g, '');
+ document.getElementById('alerta-erro').classList.remove('visivel');
+ document.getElementById('msg-documento').className = 'msg';
+ document.getElementById('msg-documento').textContent = '';
+ this.classList.remove('erro');
+ // maxLength do input fica sempre em 18 (não reduzir pra 14),
+ // senão o navegador trava a digitação do 12º dígito assim que o
+ // CPF formatado bate 14 caracteres, impedindo virar CNPJ.
+ if (v.length <= 11) {
+  v = v.slice(0,11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+ } else {
+  v = v.slice(0,14);
+  if (v.length > 12) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+  else if (v.length > 8) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
+  else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,3})/, '$1.$2');
+ }
+ this.value = v;
+ this.maxLength = 18;
+});
+
+document.getElementById('senha').addEventListener('input', function () {
+ document.getElementById('alerta-erro').classList.remove('visivel');
+ document.getElementById('msg-senha').className = 'msg';
+ document.getElementById('msg-senha').textContent = '';
+ this.classList.remove('erro');
+});
+
+function verSenha() {
+ const el = document.getElementById('senha');
+ const btn = document.querySelector('.btn-olho');
+ el.type = el.type === 'password' ? 'text' : 'password';
+ const visivel = el.type === 'text';
+ btn.textContent = visivel ? '🙈' : '👁';
+ btn.setAttribute('aria-label', visivel ? 'Ocultar senha' : 'Mostrar senha');
+ btn.setAttribute('aria-pressed', String(visivel));
+}
+
+function cpfValido(c) {
+ if (/^(\d)\1{10}$/.test(c)) return false;
+ let s = 0;
+ for (let i = 0; i < 9; i++) s += +c[i] * (10 - i);
+ let r = (s * 10) % 11; if (r === 10 || r === 11) r = 0;
+ if (r !== +c[9]) return false;
+ s = 0;
+ for (let i = 0; i < 10; i++) s += +c[i] * (11 - i);
+ r = (s * 10) % 11; if (r === 10 || r === 11) r = 0;
+ return r === +c[10];
+}
+
+function cnpjValido(c) {
+ if (/^(\d)\1{13}$/.test(c)) return false;
+ const calc = (n, len) => {
+  let s = 0, pos = len - 7;
+  for (let i = len; i >= 1; i--) { s += +n[len-i] * pos--; if (pos < 2) pos = 9; }
+  return s % 11 < 2 ? 0 : 11 - (s % 11);
+ };
+ return calc(c, 12) === +c[12] && calc(c, 13) === +c[13];
+}
+
+async function fazerLogin() {
+ const docEl    = document.getElementById('documento');
+ const senhaEl  = document.getElementById('senha');
+ const alertaEl = document.getElementById('alerta-erro');
+ const btn      = document.getElementById('btnEntrar');
+ const lembrar  = document.getElementById('lembrar').checked;
+
+ const docVal = docEl.value.trim();
+ const num    = docVal.replace(/\D/g, '');
+ const senha  = senhaEl.value;
+ let valido   = true;
+
+ // ── Validações locais ──
+ if (!docVal) {
+  document.getElementById('msg-documento').className = 'msg erro';
+  document.getElementById('msg-documento').textContent = 'Informe seu CPF ou CNPJ.';
+  docEl.classList.add('erro'); valido = false;
+ } else if (num.length === 11 && !cpfValido(num)) {
+  document.getElementById('msg-documento').className = 'msg erro';
+  document.getElementById('msg-documento').textContent = '✗ CPF inválido.';
+  docEl.classList.add('erro'); valido = false;
+ } else if (num.length === 14 && !cnpjValido(num)) {
+  document.getElementById('msg-documento').className = 'msg erro';
+  document.getElementById('msg-documento').textContent = '✗ CNPJ inválido.';
+  docEl.classList.add('erro'); valido = false;
+ } else if (num.length !== 11 && num.length !== 14) {
+  document.getElementById('msg-documento').className = 'msg erro';
+  document.getElementById('msg-documento').textContent = 'Documento incompleto.';
+  docEl.classList.add('erro'); valido = false;
+ }
+
+ if (!senha) {
+  document.getElementById('msg-senha').className = 'msg erro';
+  document.getElementById('msg-senha').textContent = 'Informe sua senha.';
+  senhaEl.classList.add('erro'); valido = false;
+ }
+
+ if (!valido) return;
+
+ // ── Chamada à API ──
+ btn.disabled = true;
+ btn.textContent = 'Entrando...';
+
+ try {
+  const data = await ApiAuth.login(docVal, senha, lembrar);
+
+  // Salva token e dados do usuário
+  Auth.salvar(data.token, data.usuario);
+
+  // Mostra tela de sucesso
+  document.getElementById('formBox').style.display = 'none';
+  document.getElementById('sucessoBox').classList.add('ativo');
+  const tipo = num.length === 11 ? 'CPF' : 'CNPJ';
+  document.getElementById('sucesso-msg').innerHTML =
+   'Bem-vindo(a), <strong>' + data.usuario.nome + '</strong>!<br>' +
+   tipo + ': ' + docVal;
+
+  // Redireciona após 1.5s
+  setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+
+ } catch (err) {
+  alertaEl.textContent = err.message || 'CPF/CNPJ ou senha incorretos.';
+  alertaEl.classList.add('visivel');
+  btn.disabled = false;
+  btn.textContent = 'Entrar';
+ }
+}
+
+document.getElementById('senha').addEventListener('keydown', function (e) {
+ if (e.key === 'Enter') fazerLogin();
+});
+</script>
+<script src="transitions.js"></script>
+</body>
+</html>

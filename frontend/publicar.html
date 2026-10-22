@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Publicar Projeto - FreelaFree</title>
+ <meta name="description" content="Publique seu projeto na FreelaFree e receba propostas de freelancers qualificados.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="Publicar projeto — FreelaFree">
+ <meta property="og:description" content="Publique seu projeto na FreelaFree e receba propostas de freelancers qualificados.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Publicar projeto — FreelaFree">
+ <meta name="twitter:description" content="Publique seu projeto na FreelaFree e receba propostas de freelancers qualificados.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link{position:absolute;left:-9999px;top:0;background:#2563eb;color:#fff;padding:10px 16px;z-index:1000;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+  .skip-link:focus{left:0;}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid #2563eb;outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+ </style>
+</head>
+<body>
+
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Publique seu projeto e encontre freelancers rapidamente.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links-publicar">&#9776;</button>
+ <div class="nav-links" id="nav-links-publicar">
+ <a href="index.html">Inicio</a>
+ <a href="index.html#sobre">Sobre</a>
+ <a href="index.html#servicos">Serviços</a>
+ <a href="index.html#beneficios">Benefícios</a>
+ <a href="index.html#footer">Contato</a>
+ <a href="termos.html">Termos de uso</a>
+ <a href="privacidade.html">Privacidade</a>
+ <a href="index.html#como-funciona">Como Funciona</a>
+ <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+ <div class="search-bar">
+ <label for="busca-publicar" class="sr-only">Buscar no site</label>
+ <input type="text" id="busca-publicar" placeholder="Buscar...">
+ <button class="search-btn" aria-label="Buscar"></button>
+ </div>
+ <div id="userArea"></div>
+ </div>
+</nav>
+
+<div class="pub-wrap" id="conteudo-principal">
+
+ <div class="pub-header">
+ <h2>Publicar projeto</h2>
+ <p>Preencha os detalhes e encontre o freelancer ideal.</p>
+ </div>
+
+ <!-- Alerta de erro -->
+ <div id="alerta-pub" role="alert" aria-live="assertive" style="display:none;background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;max-width:720px;margin-left:auto;margin-right:auto;"></div>
+
+ <div class="preview-bar" id="previewBar" style="display:none;" aria-live="polite">
+ <div class="preview-item"><span>Categoria</span><strong id="prev-cat">—</strong></div>
+ <div class="preview-item"><span>Orçamento</span><strong id="prev-orc">—</strong></div>
+ <div class="preview-item"><span>Prazo</span><strong id="prev-prazo">—</strong></div>
+ <div class="preview-item"><span>Urgência</span><strong id="prev-urg">—</strong></div>
+ </div>
+
+ <div class="form-card">
+ <div class="section-label">Informações do projeto</div>
+
+ <div class="campo">
+ <label for="titulo">Título do projeto</label>
+ <p class="hint" id="titulo-hint">Seja claro e objetivo — bons títulos atraem mais propostas.</p>
+ <input type="text" id="titulo" placeholder="Ex: Criar logo profissional para startup de tecnologia" maxlength="80" required aria-required="true" aria-describedby="titulo-hint titulo-count">
+ <div class="char-count" id="titulo-count" aria-live="polite">0 / 80</div>
+ </div>
+
+ <div class="campo">
+ <label for="descricao">Descrição detalhada</label>
+ <p class="hint" id="descricao-hint">Explique o que precisa ser feito, entregáveis esperados e referências.</p>
+ <textarea id="descricao" placeholder="Descreva o projeto com detalhes..." maxlength="1000" required aria-required="true" aria-describedby="descricao-hint desc-count"></textarea>
+ <div class="char-count" id="desc-count" aria-live="polite">0 / 1000</div>
+ </div>
+
+ <div class="campo">
+ <label id="categoria-label">Categoria</label>
+ <div class="tags-wrap" id="categorias" role="radiogroup" aria-labelledby="categoria-label">
+ <div class="tag selected" data-val="Design" role="radio" aria-checked="true" tabindex="0">Design</div>
+ <div class="tag" data-val="Programação" role="radio" aria-checked="false" tabindex="-1">Programação</div>
+ <div class="tag" data-val="Redação" role="radio" aria-checked="false" tabindex="-1">Redação</div>
+ <div class="tag" data-val="Marketing" role="radio" aria-checked="false" tabindex="-1">Marketing</div>
+ <div class="tag" data-val="Vídeo" role="radio" aria-checked="false" tabindex="-1">Vídeo e edição</div>
+ <div class="tag" data-val="Tradução" role="radio" aria-checked="false" tabindex="-1">Tradução</div>
+ <div class="tag" data-val="Consultoria" role="radio" aria-checked="false" tabindex="-1">Consultoria</div>
+ <div class="tag" data-val="Outro" role="radio" aria-checked="false" tabindex="-1">Outro</div>
+ </div>
+ </div>
+
+ <hr class="divider">
+ <div class="section-label">Prazo e orçamento</div>
+
+ <div class="grid-2">
+ <div class="campo">
+ <label for="orcamento">Orçamento estimado</label>
+ <div class="orcamento-wrap">
+ <span class="prefix" aria-hidden="true">R$</span>
+ <input type="number" id="orcamento" placeholder="0" min="0" aria-label="Orçamento estimado em reais">
+ </div>
+ </div>
+ <div class="campo">
+ <label for="tipoOrc">Tipo de orçamento</label>
+ <select id="tipoOrc">
+ <option value="fixo">Preço fixo</option>
+ <option value="hora">Por hora</option>
+ </select>
+ </div>
+ </div>
+
+ <div class="campo">
+ <label id="prazo-label">Prazo de entrega</label>
+ <div class="prazo-opcoes" id="prazos" role="radiogroup" aria-labelledby="prazo-label">
+ <div class="prazo-btn" data-val="Até 3 dias" role="radio" aria-checked="false" tabindex="-1">Até 3 dias</div>
+ <div class="prazo-btn selected" data-val="1 semana" role="radio" aria-checked="true" tabindex="0">1 semana</div>
+ <div class="prazo-btn" data-val="2 semanas" role="radio" aria-checked="false" tabindex="-1">2 semanas</div>
+ <div class="prazo-btn" data-val="1 mês+" role="radio" aria-checked="false" tabindex="-1">1 mês+</div>
+ </div>
+ </div>
+
+ <div class="campo">
+ <label id="urgencia-label">Nível de urgência</label>
+ <div class="urgencia-wrap" id="urgencias" role="radiogroup" aria-labelledby="urgencia-label">
+ <div class="urgencia-opt" data-val="Baixa" role="radio" aria-checked="false" tabindex="-1">
+ <div class="urg-label">Baixa</div>
+ <div class="urg-sub">Sem pressa</div>
+ </div>
+ <div class="urgencia-opt selected" data-val="Normal" role="radio" aria-checked="true" tabindex="0">
+ <div class="urg-label">Normal</div>
+ <div class="urg-sub">Padrão</div>
+ </div>
+ <div class="urgencia-opt" data-val="Alta" role="radio" aria-checked="false" tabindex="-1">
+ <div class="urg-label">Alta</div>
+ <div class="urg-sub">Urgente</div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="footer-actions">
+ <button class="btn-cancelar" onclick="window.location.href='index.html'">Cancelar</button>
+ <button class="btn-publicar-main" id="btnPublicar">Publicar projeto</button>
+ </div>
+
+</div>
+
+<footer id="footer">
+ <div class="footer-contato">
+ <p>Freelafree3@gmail.com</p>
+ <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+ <img src="instagram.svg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+ </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script>
+// Redireciona para login se não estiver autenticado
+document.addEventListener('DOMContentLoaded', () => {
+ if (!Auth.logado()) {
+ alert('Você precisa estar logado para publicar um projeto.');
+ window.location.href = 'login.html';
+ return;
+ }
+ const usuario = Auth.usuario();
+ if (usuario && usuario.tipo_doc === 'cpf') {
+ alert('Apenas contas com CNPJ (contratantes) podem publicar projetos. Freelancers podem visualizar e enviar propostas em "Quero Trabalhar".');
+ window.location.href = 'trabalhos.html';
+ }
+});
+
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const expandido = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!expandido));
+});
+
+let catSel = 'Design', prazoSel = '1 semana', urgSel = 'Normal';
+
+function updatePreview() {
+ const orc = document.getElementById('orcamento').value;
+ const tipo = document.getElementById('tipoOrc').value;
+ document.getElementById('prev-cat').textContent = catSel;
+ document.getElementById('prev-prazo').textContent = prazoSel;
+ document.getElementById('prev-urg').textContent = urgSel;
+ let orcText = '—';
+ if (orc && Number(orc) > 0) {
+ orcText = 'R$' + Number(orc).toLocaleString('pt-BR') + (tipo === 'hora' ? '/h' : '');
+ }
+ document.getElementById('prev-orc').textContent = orcText;
+ const titulo = document.getElementById('titulo').value.trim();
+ const desc = document.getElementById('descricao').value.trim();
+ document.getElementById('previewBar').style.display = (titulo || desc || orc) ? 'flex' : 'none';
+}
+
+// Ativa um grupo de opções (role="radiogroup") com suporte a clique e teclado
+function ativarGrupoSelecao(grupoSeletor, itemSeletor, aoSelecionar) {
+ const grupo = document.querySelector(grupoSeletor);
+ const itens = Array.from(document.querySelectorAll(itemSeletor));
+
+ function selecionar(item) {
+ itens.forEach(x => {
+ x.classList.remove('selected');
+ x.setAttribute('aria-checked', 'false');
+ x.setAttribute('tabindex', '-1');
+ });
+ item.classList.add('selected');
+ item.setAttribute('aria-checked', 'true');
+ item.setAttribute('tabindex', '0');
+ item.focus();
+ aoSelecionar(item.dataset.val);
+ updatePreview();
+ }
+
+ itens.forEach((item, idx) => {
+ item.addEventListener('click', () => selecionar(item));
+ item.addEventListener('keydown', (e) => {
+ if (e.key === 'Enter' || e.key === ' ') {
+ e.preventDefault();
+ selecionar(item);
+ } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+ e.preventDefault();
+ selecionar(itens[(idx + 1) % itens.length]);
+ } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+ e.preventDefault();
+ selecionar(itens[(idx - 1 + itens.length) % itens.length]);
+ }
+ });
+ });
+}
+
+ativarGrupoSelecao('#categorias', '#categorias .tag',        v => catSel   = v);
+ativarGrupoSelecao('#prazos',     '#prazos .prazo-btn',      v => prazoSel = v);
+ativarGrupoSelecao('#urgencias',  '#urgencias .urgencia-opt', v => urgSel   = v);
+
+document.getElementById('titulo').addEventListener('input', function () {
+ const n = this.value.length;
+ const el = document.getElementById('titulo-count');
+ el.textContent = n + ' / 80';
+ el.className = 'char-count' + (n > 70 ? ' warn' : '') + (n >= 80 ? ' err' : '');
+ updatePreview();
+});
+document.getElementById('descricao').addEventListener('input', function () {
+ const n = this.value.length;
+ const el = document.getElementById('desc-count');
+ el.textContent = n + ' / 1000';
+ el.className = 'char-count' + (n > 900 ? ' warn' : '') + (n >= 1000 ? ' err' : '');
+ updatePreview();
+});
+document.getElementById('orcamento').addEventListener('input', updatePreview);
+document.getElementById('tipoOrc').addEventListener('change', updatePreview);
+
+document.getElementById('btnPublicar').addEventListener('click', async function () {
+ const titulo = document.getElementById('titulo').value.trim();
+ const descricao = document.getElementById('descricao').value.trim();
+ const orcamento = document.getElementById('orcamento').value;
+ const tipoOrc = document.getElementById('tipoOrc').value;
+ const alerta = document.getElementById('alerta-pub');
+ const btn = this;
+
+ if (!titulo) { document.getElementById('titulo').focus(); return; }
+ if (!descricao) { document.getElementById('descricao').focus(); return; }
+
+ btn.disabled = true;
+ btn.textContent = 'Publicando...';
+ alerta.style.display = 'none';
+
+ try {
+ await ApiProjetos.publicar({
+ titulo, descricao,
+ categoria: catSel,
+ orcamento: orcamento ? Number(orcamento) : null,
+ tipo_orcamento: tipoOrc,
+ prazo: prazoSel,
+ urgencia: urgSel
+ });
+ alert('Projeto publicado com sucesso!');
+ window.location.href = 'trabalhos.html';
+ } catch (err) {
+ alerta.style.display = 'block';
+ alerta.textContent = err.message || 'Erro ao publicar projeto. Tente novamente.';
+ btn.disabled = false;
+ btn.textContent = 'Publicar projeto';
+ }
+});
+</script>
+<script src="transitions.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Meus Projetos - FreelaFree</title>
+ <meta name="description" content="Gerencie os projetos que você publicou na FreelaFree.">
+ <meta name="theme-color" content="#2563eb">
+ <link rel="icon" type="image/svg+xml" href="favicon.svg">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="FreelaFree">
+ <meta property="og:title" content="Meus projetos — FreelaFree">
+ <meta property="og:description" content="Gerencie os projetos que você publicou na FreelaFree.">
+ <meta property="og:image" content="favicon.svg">
+ <meta property="og:locale" content="pt_BR">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Meus projetos — FreelaFree">
+ <meta name="twitter:description" content="Gerencie os projetos que você publicou na FreelaFree.">
+ <link rel="stylesheet" href="style.css">
+ <style>
+  .skip-link{position:absolute;left:-9999px;top:0;background:#2563eb;color:#fff;padding:10px 16px;z-index:1000;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+  .skip-link:focus{left:0;}
+  a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #2563eb;outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  .mp-wrap{max-width:900px;margin:0 auto;padding:28px 18px 60px;}
+  .mp-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:24px;}
+  .mp-header h2{font-size:26px;color:#1e293b;margin:0 0 4px;}
+  .mp-header p{color:#64748b;margin:0;font-size:15px;}
+  .btn-novo{background:#2563eb;color:#fff;text-decoration:none;padding:11px 20px;border-radius:9px;font-weight:600;font-size:14px;white-space:nowrap;}
+  .btn-novo:hover{background:#1d4ed8;}
+
+  .mp-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .mp-tab{background:#f1f5f9;color:#475569;border:none;padding:8px 16px;border-radius:999px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:inherit;}
+  .mp-tab.ativo{background:#2563eb;color:#fff;}
+
+  .proj-bloco{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .proj-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .proj-cab h3{margin:0 0 4px;font-size:18px;color:#1e293b;}
+  .proj-meta{font-size:13px;color:#64748b;}
+  .proj-desc{font-size:14px;color:#475569;line-height:1.5;margin:10px 0 0;}
+  .proj-status{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .st-aberto{background:#dcfce7;color:#15803d;}
+  .st-em_andamento{background:#dbeafe;color:#1d4ed8;}
+  .st-concluido{background:#f3f4f6;color:#6b7280;}
+  .st-cancelado{background:#fee2e2;color:#b91c1c;}
+
+  .proj-rodape{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-top:14px;padding-top:12px;border-top:1px dashed #e5e7eb;}
+  .proj-props{font-size:13.5px;color:#64748b;}
+  .proj-props strong{color:#2563eb;}
+  .proj-acoes{display:flex;gap:8px;}
+  .btn-ver{background:#fff;color:#2563eb;border:1px solid #bfdbfe;padding:8px 14px;border-radius:8px;
+    font-weight:600;cursor:pointer;font-size:13.5px;text-decoration:none;font-family:inherit;}
+  .btn-ver:hover{background:#eff6ff;}
+  .btn-excluir{background:#fff;color:#b91c1c;border:1px solid #fca5a5;padding:8px 14px;border-radius:8px;
+    font-weight:600;cursor:pointer;font-size:13.5px;font-family:inherit;}
+  .btn-excluir:hover{background:#fef2f2;}
+  .btn-excluir:disabled{opacity:.5;cursor:not-allowed;}
+
+  .vazio{color:#94a3b8;font-size:15px;padding:30px 0;text-align:center;}
+  .aviso{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;}
+ </style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header>
+ <h1>FreelaFree</h1>
+ <p>Gerencie os projetos que você publicou.</p>
+</header>
+
+<nav>
+ <div class="nav-left"></div>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-links-mp">&#9776;</button>
+ <div class="nav-links" id="nav-links-mp">
+  <a href="index.html">Início</a>
+  <a href="index.html#sobre">Sobre</a>
+  <a href="index.html#servicos">Serviços</a>
+  <a href="index.html#beneficios">Benefícios</a>
+  <a href="index.html#footer">Contato</a>
+  <a href="termos.html">Termos de uso</a>
+  <a href="privacidade.html">Privacidade</a>
+  <a href="mensagens.html">Mensagens</a>
+ </div>
+ <div class="nav-right">
+  <div class="search-bar">
+   <label for="buscaNav" class="sr-only">Buscar no site</label>
+   <input type="text" id="buscaNav" placeholder="Buscar...">
+   <button class="search-btn" aria-label="Buscar"></button>
+  </div>
+  <div id="userArea"></div>
+ </div>
+</nav>
+
+<main class="mp-wrap" id="conteudo">
+ <div class="mp-header">
+  <div>
+   <h2>Meus Projetos</h2>
+   <p>Veja tudo o que você publicou, acompanhe as propostas e exclua o que não faz mais sentido.</p>
+  </div>
+  <a class="btn-novo" href="#" id="btnNovoProjeto">+ Publicar projeto</a>
+ </div>
+
+ <div class="aviso" id="aviso" style="display:none;"></div>
+
+ <div class="mp-tabs">
+  <button class="mp-tab ativo" onclick="filtrar('todos', this)">Todos</button>
+  <button class="mp-tab" onclick="filtrar('aberto', this)">Abertos</button>
+  <button class="mp-tab" onclick="filtrar('em_andamento', this)">Em andamento</button>
+  <button class="mp-tab" onclick="filtrar('concluido', this)">Concluídos</button>
+ </div>
+
+ <div id="lista">
+  <div class="vazio">Carregando seus projetos...</div>
+ </div>
+</main>
+
+<footer id="footer">
+ <div class="footer-contato">
+  <p>Freelafree3@gmail.com</p>
+  <a href="https://www.instagram.com/_freelafree" target="_blank" style="text-decoration:none;display:inline-block;">
+   <img src="instagram.svg" alt="Instagram" style="width:36px;height:36px;border-radius:8px;display:block;">
+  </a>
+ </div>
+ <p>© 2026 FreelaFree</p>
+</footer>
+
+<script src="api.js"></script>
+<script src="ui.js"></script>
+<script>
+document.getElementById('hamburger')?.addEventListener('click', function () {
+ const expandido = this.getAttribute('aria-expanded') === 'true';
+ this.setAttribute('aria-expanded', String(!expandido));
+});
+
+function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function real(v){ return 'R$ ' + Number(v||0).toLocaleString('pt-BR', {minimumFractionDigits:2}); }
+
+let projetos = [];
+let filtroAtual = 'todos';
+
+function filtrar(status, el) {
+ filtroAtual = status;
+ document.querySelectorAll('.mp-tab').forEach(t => t.classList.remove('ativo'));
+ if (el) el.classList.add('ativo');
+ render();
+}
+
+async function carregar() {
+ const lista = document.getElementById('lista');
+ try {
+  projetos = await ApiProjetos.meus();
+ } catch (err) {
+  lista.innerHTML = '<div class="vazio">Não foi possível carregar. Faça login como contratante.</div>';
+  return;
+ }
+ render();
+}
+
+function render() {
+ const lista = document.getElementById('lista');
+ let itens = projetos;
+ if (filtroAtual !== 'todos') itens = itens.filter(p => p.status === filtroAtual);
+
+ if (!itens.length) {
+  lista.innerHTML = projetos.length
+   ? '<div class="vazio">Nenhum projeto com esse status.</div>'
+   : '<div class="vazio">Você ainda não publicou nenhum projeto.<br>Publique o primeiro para começar a receber propostas.</div>';
+  return;
+ }
+
+ lista.innerHTML = '';
+ itens.forEach(p => {
+  const pend = Number(p.propostas_pendentes) || 0;
+  // Só dá para excluir projeto que ainda não virou contrato.
+  const podeExcluir = p.status === 'aberto';
+  const bloco = document.createElement('div');
+  bloco.className = 'proj-bloco';
+  bloco.innerHTML = `
+   <div class="proj-cab">
+    <div>
+     <h3>${escapeHtml(p.titulo)}</h3>
+     <div class="proj-meta">${escapeHtml(p.categoria || '')} · ${real(p.orcamento)} · ${escapeHtml(p.prazo || '')}</div>
+    </div>
+    <span class="proj-status st-${p.status}">${String(p.status).replace('_',' ')}</span>
+   </div>
+   <p class="proj-desc">${escapeHtml(p.descricao || '')}</p>
+   <div class="proj-rodape">
+    <div class="proj-props">
+     ${pend ? `<strong>${pend}</strong> proposta${pend > 1 ? 's' : ''} pendente${pend > 1 ? 's' : ''}` : 'Nenhuma proposta pendente'}
+    </div>
+    <div class="proj-acoes">
+     <a class="btn-ver" href="propostas-recebidas.html">Ver propostas</a>
+     ${podeExcluir
+       ? `<button class="btn-excluir" onclick="excluir(${p.id}, this)">Excluir</button>`
+       : ''}
+    </div>
+   </div>`;
+  lista.appendChild(bloco);
+ });
+}
+
+async function excluir(id, btn) {
+ const p = projetos.find(x => Number(x.id) === Number(id));
+ const titulo = p ? p.titulo : 'este projeto';
+ const ok = await ffConfirm(
+  `Excluir "${titulo}"? Ele deixa de aparecer para os freelancers e as propostas recebidas são encerradas.`,
+  'Excluir projeto'
+ );
+ if (!ok) return;
+
+ if (btn) { btn.disabled = true; btn.textContent = 'Excluindo...'; }
+ try {
+  await ApiProjetos.cancelar(id);
+  projetos = projetos.filter(x => Number(x.id) !== Number(id));
+  render();
+  alert('Projeto excluído com sucesso.');
+ } catch (err) {
+  alert(err?.message || 'Não foi possível excluir o projeto.');
+  if (btn) { btn.disabled = false; btn.textContent = 'Excluir'; }
+ }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+ if (typeof Auth === 'undefined' || !Auth.logado()) {
+  alert('Você precisa estar logado para ver seus projetos.');
+  window.location.href = 'login.html';
+  return;
+ }
+ const u = Auth.usuario();
+ if (!u || u.tipo_doc !== 'cnpj') {
+  alert('Apenas contas de contratante (CNPJ) publicam projetos.');
+  window.location.href = 'index.html';
+  return;
+ }
+
+ // Aponta o "+ Publicar projeto" para a mesma página do botão do site
+ const alvo = document.querySelector('a[href*="publicar"]:not(#btnNovoProjeto)');
+ const btn = document.getElementById('btnNovoProjeto');
+ if (btn) btn.href = alvo ? alvo.getAttribute('href') : 'publicar-projeto.html';
+
+ carregar();
+});
+</script>
+<script src="transitions.js"></script>
+</body>
+</html>
