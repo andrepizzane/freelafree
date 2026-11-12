@@ -127,6 +127,12 @@
 <script src="api.js"></script>
 <script src="ui.js"></script>
 <script>
+// Redirecionado após a moderação desativar a conta
+if (new URLSearchParams(window.location.search).get('desativada') === '1') {
+ const aviso = document.getElementById('alerta-erro');
+ aviso.textContent = 'Sua conta foi desativada pela moderação. Entre em contato com o suporte.';
+ aviso.classList.add('visivel');
+}
 document.getElementById('hamburger')?.addEventListener('click', function () {
  const expandido = this.getAttribute('aria-expanded') === 'true';
  this.setAttribute('aria-expanded', String(!expandido));

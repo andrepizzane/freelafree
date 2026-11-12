@@ -82,6 +82,16 @@ async function req(method, path, body = null, auth = false) {
     if (body) opts.body = JSON.stringify(body);
     const res  = await fetch(API_BASE + path, opts);
     const data = await res.json().catch(() => ({}));
+
+    // Conta desativada pela moderação: derruba a sessão e manda para o login.
+    if (res.status === 403 && /conta desativada/i.test(data.erro || '')) {
+        Auth.sair();
+        if (!/login\.html$/i.test(window.location.pathname)) {
+            window.location.href = 'login.html?desativada=1';
+        }
+        throw new Error(data.erro);
+    }
+
     if (!res.ok) throw new Error(data.erro || `Erro ${res.status}`);
     return data;
 }
