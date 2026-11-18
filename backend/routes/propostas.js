@@ -5,18 +5,9 @@
 
 const express    = require('express');
 const router     = express.Router();
-const nodemailer = require('nodemailer');
 const db = require('../db/connection');
 const { autenticar } = require('../middleware/autenticar');  // ← atualizado
 const { criarNotificacao } = require('../utils/notificacoes');
-
-// Transporter de e-mail (usa as variáveis SMTP_ do .env)
-const mailer = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: false,
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-});
 
 // Middleware: só contas CPF podem enviar propostas
 function exigirFreelancer(req, res, next) {
@@ -98,7 +89,7 @@ router.post('/', autenticar, exigirFreelancer, async (req, res) => {
             [projeto_id, req.usuario.id, Number(valor), prazo_proposto, mensagem]
         );
 
-        // Notifica o contratante por e-mail (não bloqueia a resposta se falhar)
+        // Notifica o contratante (sistema + e-mail via criarNotificacao; não bloqueia a resposta se falhar)
         try {
             const [[dados]] = await db.query(
                 `SELECT p.titulo, uc.email AS contratante_email, uf.nome AS freelancer_nome
@@ -108,31 +99,16 @@ router.post('/', autenticar, exigirFreelancer, async (req, res) => {
                  WHERE p.id = ?`,
                 [req.usuario.id, projeto_id]
             );
-            if (dados && dados.contratante_email) {
-                const valorFmt = 'R$ ' + Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                await mailer.sendMail({
-                    from: '"FreelaFree" <' + process.env.SMTP_USER + '>',
-                    to: dados.contratante_email,
-                    subject: 'Nova proposta recebida - FreelaFree',
-                    html: `
-                        <p>Você recebeu uma nova proposta no seu projeto <strong>${dados.titulo}</strong>.</p>
-                        <p><strong>Freelancer:</strong> ${dados.freelancer_nome}<br>
-                           <strong>Valor:</strong> ${valorFmt}<br>
-                           <strong>Prazo:</strong> ${prazo_proposto}</p>
-                        <p>Acesse a página <strong>Propostas Recebidas</strong> na FreelaFree para aceitar ou recusar.</p>
-                    `
-                });
-            }
             if (dados) {
                 await criarNotificacao(
                     proj.contratante_id,
                     'proposta_recebida',
-                    `Nova proposta de ${dados.freelancer_nome} no projeto "${dados.titulo}"`,
+                    `Nova proposta de ${dados.freelancer_nome} no projeto "${dados.titulo}": R$ ${Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} em ${prazo_proposto}.`,
                     'propostas-recebidas.html'
                 );
             }
         } catch (mailErr) {
-            console.error('[propostas/POST] Falha ao enviar e-mail:', mailErr);
+            console.error('[propostas/POST] Falha ao notificar:', mailErr);
         }
 
         return res.status(201).json({ mensagem: 'Proposta enviada!', proposta_id: result.insertId });

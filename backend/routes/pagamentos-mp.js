@@ -18,6 +18,7 @@ const express = require('express');
 const router  = express.Router();
 const db = require('../db/connection');
 const mp = require('../mercadopago');
+const { criarNotificacao } = require('../utils/notificacoes');
 const { autenticar } = require('../middleware/autenticar');
 
 // URL pública do Dev Tunnel (porta 3000), para o webhook do Mercado Pago.
@@ -74,6 +75,22 @@ async function liberarProjeto(pagamentoRow) {
     } catch (msgErr) {
         console.error('[pagamentos/liberarProjeto] Falha ao criar mensagem automática:', msgErr);
     }
+
+    // Avisa as duas pontas (sistema + e-mail): freelancer (CPF) e contratante (CNPJ)
+    const fmt = v => 'R$ ' + Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    const link = 'mensagens.html?match=' + match.id;
+    await criarNotificacao(
+        match.freelancer_id,
+        'pagamento_liberado',
+        `Pagamento de ${fmt(pagamentoRow.valor_freelancer)} liberado — projeto concluído!`,
+        link
+    );
+    await criarNotificacao(
+        match.contratante_id,
+        'pagamento_aprovado',
+        `Seu pagamento de ${fmt(pagamentoRow.valor_total)} foi confirmado e o projeto foi concluído.`,
+        link
+    );
 }
 
 // -- 1) Criar cobranca Pix ----------------------------------

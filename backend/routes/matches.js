@@ -164,6 +164,12 @@ router.patch('/:id/concluir', autenticar, async (req, res) => {
             `Pagamento de ${valorFmt} liberado — projeto concluído!`,
             'mensagens.html?match=' + match.id
         );
+        await criarNotificacao(
+            match.contratante_id,
+            'pagamento_aprovado',
+            `Seu pagamento de R$ ${totalPago.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} foi registrado e o projeto foi concluído.`,
+            'mensagens.html?match=' + match.id
+        );
 
         return res.json({
             mensagem: 'Projeto concluído e pagamento registrado!',
