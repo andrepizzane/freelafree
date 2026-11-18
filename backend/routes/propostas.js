@@ -78,7 +78,17 @@ router.post('/', autenticar, exigirFreelancer, async (req, res) => {
         if (proj.contratante_id === req.usuario.id) {
             return res.status(400).json({ erro: 'Você não pode se candidatar ao seu próprio projeto.' });
         }
-        if (Number(valor) > Number(proj.orcamento)) {
+        // Valor precisa ser um número válido e positivo (sem valor mínimo definido).
+        const valorNum = Number(String(valor).replace(',', '.'));
+        if (!Number.isFinite(valorNum) || valorNum <= 0) {
+            return res.status(400).json({ erro: 'Informe um valor de proposta válido, maior que zero.' });
+        }
+        if (valorNum > 99999999.99) {
+            return res.status(400).json({ erro: 'Valor da proposta muito alto.' });
+        }
+        // Teto = orçamento do projeto. Projeto sem orçamento definido não tem teto.
+        const teto = Number(proj.orcamento);
+        if (teto > 0 && valorNum > teto) {
             const orcamentoFmt = 'R$ ' + Number(proj.orcamento).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
             return res.status(400).json({ erro: `Sua proposta não pode ultrapassar o orçamento do projeto (${orcamentoFmt}).` });
         }
@@ -86,7 +96,7 @@ router.post('/', autenticar, exigirFreelancer, async (req, res) => {
         const [result] = await db.query(
             `INSERT INTO propostas (projeto_id, freelancer_id, valor, prazo_proposto, mensagem)
              VALUES (?, ?, ?, ?, ?)`,
-            [projeto_id, req.usuario.id, Number(valor), prazo_proposto, mensagem]
+            [projeto_id, req.usuario.id, valorNum, prazo_proposto, mensagem]
         );
 
         // Notifica o contratante (sistema + e-mail via criarNotificacao; não bloqueia a resposta se falhar)
@@ -103,7 +113,7 @@ router.post('/', autenticar, exigirFreelancer, async (req, res) => {
                 await criarNotificacao(
                     proj.contratante_id,
                     'proposta_recebida',
-                    `Nova proposta de ${dados.freelancer_nome} no projeto "${dados.titulo}": R$ ${Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} em ${prazo_proposto}.`,
+                    `Nova proposta de ${dados.freelancer_nome} no projeto "${dados.titulo}": R$ ${valorNum.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} em ${prazo_proposto}.`,
                     'propostas-recebidas.html'
                 );
             }

@@ -321,8 +321,9 @@ async function abrirModal(id) {
   pintarRepContratante('repmodal-' + p.id, p.contratante_id);
   document.getElementById('propValor').value = '';
   document.getElementById('propValor').max   = Number(p.orcamento) || '';
-  document.getElementById('propValorTeto').textContent =
-   'Valor máximo aceito: R$ ' + Number(p.orcamento || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  document.getElementById('propValorTeto').textContent = Number(p.orcamento) > 0
+   ? 'Valor máximo aceito: R$ ' + Number(p.orcamento).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+   : 'Este projeto não tem orçamento definido: informe o valor que achar justo.';
   document.getElementById('propPrazo').value = '';
   document.getElementById('propMsg').value   = '';
   document.getElementById('msg-proposta').style.display = 'none';
